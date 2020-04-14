@@ -43,13 +43,13 @@ Example of config.json
                 "size": "10"
             },
             {
-                "id": "first name",
+                "id": "first_name",
                 "name": "first name",
                 "type": "varchar",
                 "size": "255"
             },
             {
-                "id": "last name",
+                "id": "last_name",
                 "name": "last name",
                 "type": "varchar",
                 "size": "255"
