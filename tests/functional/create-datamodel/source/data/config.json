@@ -1,0 +1,36 @@
+{
+    "parameters": {
+        "host": "xxx",
+        "port": "xxx",
+        "username": "xxx",
+        "#password": "xxx",
+        "tableId": "sales",
+        "datamodelName": "xxx",
+        "columns": [
+            {
+                "id": "usergender",
+                "name": "usergender",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "id": "usercity",
+                "name": "usercity",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "id": "usersentiment",
+                "name": "usersentiment",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "id": "zipcode",
+                "name": "zipcode",
+                "type": "varchar",
+                "size": "255"
+            }
+        ]
+    }
+}
