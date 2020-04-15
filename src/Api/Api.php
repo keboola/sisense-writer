@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 use Keboola\Component\UserException;
 use Keboola\SiSenseWriter\Config;
+use Psr\Http\Message\ResponseInterface;
 
 class Api
 {
@@ -65,15 +66,13 @@ class Api
                     ],
                 ]
             );
-            $response = $this->client->request(
-                'post',
+            $response = $this->client->post(
                 sprintf('%s/storage/fs/upload', $this->config->getUrlAddress()),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
+                    'headers' => $this->getHeaders([
                         'x-upload-token' => $this->validateFile($dataDir, $filename),
                         'Content-Type' => 'multipart/form-data; boundary=' . $streamFile->getBoundary(),
-                    ],
+                    ]),
                     'body' => $streamFile,
                 ]
             );
@@ -88,15 +87,10 @@ class Api
     public function getDatamodel(string $datamodelName): ?array
     {
         try {
-            $response = $this->client->get(
-                sprintf('%s/api/v2/datamodels/schema', $this->config->getUrlAddress()),
+            $response = $this->clientGetRequest(
+                '/api/v2/datamodels/schema',
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'query' => [
-                        'title' => $datamodelName,
-                    ],
+                    'title' => $datamodelName,
                 ]
             );
         } catch (ServerException $exception) {
@@ -109,15 +103,10 @@ class Api
     public function createDatamodel(string $datamodelName): array
     {
         try {
-            $response = $this->client->post(
-                sprintf('%s/api/v2/datamodels', $this->config->getUrlAddress()),
+            $response = $this->clientPostRequest(
+                '/api/v2/datamodels',
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'title' => $datamodelName,
-                    ],
+                    'title' => $datamodelName,
                 ]
             );
         } catch (ClientException | ServerException $exception) {
@@ -130,14 +119,7 @@ class Api
     public function deleteDatamodel(string $datamodelId): void
     {
         try {
-            $this->client->delete(
-                sprintf('%s/api/v2/datamodels/%s', $this->config->getUrlAddress(), $datamodelId),
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                ]
-            );
+            $this->clientDeleteRequest(sprintf('/api/v2/datamodels/%s', $datamodelId));
         } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -146,18 +128,7 @@ class Api
     public function getDataset(string $datamodelId, string $datasetName): ?array
     {
         try {
-            $response = $this->client->get(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets',
-                    $this->config->getUrlAddress(),
-                    $datamodelId
-                ),
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                ]
-            );
+            $response = $this->clientGetRequest(sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId));
         } catch (ServerException $exception) {
             return null;
         }
@@ -195,21 +166,12 @@ class Api
         ];
 
         try {
-            $response = $this->client->post(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets',
-                    $this->config->getUrlAddress(),
-                    $datamodelId
-                ),
+            $response = $this->clientPostRequest(
+                sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'name' => $datasetName,
-                        'type' => 'extract',
-                        'connection' => $connection,
-                    ],
+                    'name' => $datasetName,
+                    'type' => 'extract',
+                    'connection' => $connection,
                 ]
             );
         } catch (ClientException | ServerException $exception) {
@@ -241,21 +203,11 @@ class Api
         ];
 
         try {
-            $response = $this->client->patch(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets/%s',
-                    $this->config->getUrlAddress(),
-                    $datamodelId,
-                    $datasetId
-                ),
+            $response = $this->clientPatchRequest(
+                sprintf('/api/v2/datamodels/%s/schema/datasets/%s', $datamodelId, $datasetId),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'type' => 'extract',
-                        'connection' => $connection,
-                    ],
+                    'type' => 'extract',
+                    'connection' => $connection,
                 ]
             );
         } catch (ClientException | ServerException $exception) {
@@ -268,19 +220,11 @@ class Api
     public function deleteDataset(string $datamodelId, string $datasetId): void
     {
         try {
-            $this->client->delete(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets/%s',
-                    $this->config->getUrlAddress(),
-                    $datamodelId,
-                    $datasetId
-                ),
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                ]
-            );
+            $this->clientDeleteRequest(sprintf(
+                '/api/v2/datamodels/%s/schema/datasets/%s',
+                $datamodelId,
+                $datasetId
+            ));
         } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -289,18 +233,7 @@ class Api
     public function getTable(string $datamodelId, string $datasetId, string $tableId): ?array
     {
         try {
-            $response = $this->client->get(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets',
-                    $this->config->getUrlAddress(),
-                    $datamodelId
-                ),
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                ]
-            );
+            $response = $this->clientGetRequest(sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId));
         } catch (ServerException $exception) {
             return null;
         }
@@ -328,16 +261,9 @@ class Api
     public function getTableByName(string $datamodelId, string $tableName): array
     {
         try {
-            $response = $this->client->get(
-                sprintf('%s/api/v2/datamodels/%s/schema/datasets', $this->config->getUrlAddress(), $datamodelId),
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'query' => [
-                        'fields' => 'oid, schema',
-                    ],
-                ]
+            $response = $this->clientGetRequest(
+                sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId),
+                ['fields' => 'oid, schema']
             );
         } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
@@ -363,21 +289,11 @@ class Api
     public function createTable(string $datamodelId, string $datasetId, string $tableId, array $columns): array
     {
         try {
-            $response = $this->client->post(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets/%s/tables',
-                    $this->config->getUrlAddress(),
-                    $datamodelId,
-                    $datasetId
-                ),
+            $response = $this->clientPostRequest(
+                sprintf('/api/v2/datamodels/%s/schema/datasets/%s/tables', $datamodelId, $datasetId),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'id' => $tableId,
-                        'columns' => Helpers::reformatColumns($columns),
-                    ],
+                    'id' => $tableId,
+                    'columns' => Helpers::reformatColumns($columns),
                 ]
             );
         } catch (ClientException | ServerException $exception) {
@@ -390,21 +306,15 @@ class Api
     public function updateTable(string $datamodelId, string $datasetId, string $tableId, array $columns): array
     {
         try {
-            $response = $this->client->patch(
+            $response = $this->clientPatchRequest(
                 sprintf(
-                    '%s/api/v2/datamodels/%s/schema/datasets/%s/tables/%s',
-                    $this->config->getUrlAddress(),
+                    '/api/v2/datamodels/%s/schema/datasets/%s/tables/%s',
                     $datamodelId,
                     $datasetId,
                     $tableId
                 ),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'columns' => Helpers::reformatColumns($columns),
-                    ],
+                    'columns' => Helpers::reformatColumns($columns),
                 ]
             );
         } catch (ClientException | ServerException $exception) {
@@ -417,21 +327,12 @@ class Api
     public function createRelationship(string $datamodelId, array $sourceData, array $targetData): array
     {
         try {
-            $response = $this->client->post(
-                sprintf(
-                    '%s/api/v2/datamodels/%s/schema/relations',
-                    $this->config->getUrlAddress(),
-                    $datamodelId
-                ),
+            $response = $this->clientPostRequest(
+                sprintf('/api/v2/datamodels/%s/schema/relations', $datamodelId),
                 [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'columns' => [
-                            $sourceData,
-                            $targetData,
-                        ],
+                    'columns' => [
+                        $sourceData,
+                        $targetData,
                     ],
                 ]
             );
@@ -444,20 +345,12 @@ class Api
 
     public function build(string $datamodelId, string $type): string
     {
-        $response = $this->client->post(
-            sprintf(
-                '%s/api/v2/builds',
-                $this->config->getUrlAddress(),
-            ),
+        $response = $this->clientPostRequest(
+            '/api/v2/builds',
             [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ],
-                'json' => [
-                    'datamodelId' => $datamodelId,
-                    'buildType' => $type,
-                    'rowLimit' => 0,
-                ],
+                'datamodelId' => $datamodelId,
+                'buildType' => $type,
+                'rowLimit' => 0,
             ]
         );
 
@@ -467,19 +360,7 @@ class Api
 
     public function getBuildStatus(string $buildId): ?string
     {
-        $response = $this->client->get(
-            sprintf(
-                '%s/api/v2/builds/%s',
-                $this->config->getUrlAddress(),
-                $buildId
-            ),
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ],
-            ]
-        );
-
+        $response = $this->clientGetRequest(sprintf('/api/v2/builds/%s', $buildId));
         $responseJson = json_decode($response->getBody()->getContents(), true);
         return is_null($responseJson['status']) ? 'waiting' : $responseJson['status'];
     }
@@ -489,20 +370,68 @@ class Api
         return sprintf('%s-%s', $datamodelName, $tableName);
     }
 
+    private function clientGetRequest(string $uri, array $query = [], array $headers = []): ResponseInterface
+    {
+        $options = [
+            'headers' => $this->getHeaders($headers),
+        ];
+        if ($query) {
+            $options['query'] = $query;
+        }
+        return $this->client->get(
+            $this->config->getUrlAddress() . $uri,
+            $options
+        );
+    }
+
+    private function clientPostRequest(string $uri, array $json, array $headers = []): ResponseInterface
+    {
+        $options = [
+            'headers' => $this->getHeaders($headers),
+            'json' => $json,
+        ];
+        return $this->client->post(
+            $this->config->getUrlAddress() . $uri,
+            $options
+        );
+    }
+
+    private function clientPatchRequest(string $uri, array $json, array $headers = []): ResponseInterface
+    {
+        $options = [
+            'headers' => $this->getHeaders($headers),
+            'json' => $json,
+        ];
+        return $this->client->patch(
+            $this->config->getUrlAddress() . $uri,
+            $options
+        );
+    }
+
+    private function clientDeleteRequest(string $uri): ResponseInterface
+    {
+        return $this->client->delete(
+            $this->config->getUrlAddress() . $uri,
+            ['headers' => $this->getHeaders()]
+        );
+    }
+
+    private function getHeaders(array $additionalHeaders = []): array
+    {
+        return array_merge(
+            ['Authorization' => 'Bearer ' . $this->accessToken],
+            $additionalHeaders
+        );
+    }
+
     private function validateFile(string $dataDir, string $filename): string
     {
         try {
-            $response = $this->client->post(
-                sprintf('%s/storage/fs/validate_file', $this->config->getUrlAddress()),
+            $response = $this->clientPostRequest(
+                '/storage/fs/validate_file',
                 [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->accessToken,
-                    ],
-                    'json' => [
-                        'filename' => $filename,
-                        'size' => filesize($dataDir . $filename),
-                    ],
+                    'filename' => $filename,
+                    'size' => filesize($dataDir . $filename),
                 ]
             );
         } catch (ClientException $exception) {
