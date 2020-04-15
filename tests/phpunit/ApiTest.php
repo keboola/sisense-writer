@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use Keboola\Component\UserException;
 use Keboola\Csv\CsvReader;
 use Keboola\Csv\CsvWriter;
-use Keboola\SiSenseWriter\Api;
+use Keboola\SiSenseWriter\Api\Api;
 use Keboola\SiSenseWriter\Config;
 use Keboola\SiSenseWriter\ConfigDefinition;
 use PHPUnit\Framework\Assert;

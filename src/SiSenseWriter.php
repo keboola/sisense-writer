@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Keboola\SiSenseWriter;
 
 use Keboola\Component\UserException;
+use Keboola\SiSenseWriter\Api\Api;
 use Psr\Log\LoggerInterface;
 
 class SiSenseWriter

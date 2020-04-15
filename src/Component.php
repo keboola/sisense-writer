@@ -6,6 +6,7 @@ namespace Keboola\SiSenseWriter;
 
 use GuzzleHttp\Client;
 use Keboola\Component\BaseComponent;
+use Keboola\SiSenseWriter\Api\Api;
 
 class Component extends BaseComponent
 {

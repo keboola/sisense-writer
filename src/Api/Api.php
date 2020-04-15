@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Keboola\SiSenseWriter;
+namespace Keboola\SiSenseWriter\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 use Keboola\Component\UserException;
+use Keboola\SiSenseWriter\Config;
 
 class Api
 {
@@ -375,7 +376,7 @@ class Api
                     ],
                     'json' => [
                         'id' => $tableId,
-                        'columns' => $this->reformatColumns($columns),
+                        'columns' => Helpers::reformatColumns($columns),
                     ],
                 ]
             );
@@ -402,7 +403,7 @@ class Api
                         'Authorization' => 'Bearer ' . $this->accessToken,
                     ],
                     'json' => [
-                        'columns' => $this->reformatColumns($columns),
+                        'columns' => Helpers::reformatColumns($columns),
                     ],
                 ]
             );
@@ -513,82 +514,5 @@ class Api
 
         $responseJson = json_decode($response->getBody()->getContents(), true);
         return $responseJson['token'];
-    }
-
-    private function reformatColumns(array $columns): array
-    {
-        $reformatColumns = [];
-        foreach ($columns as $column) {
-            $reformatColumn = [
-                'id' => $column['id'],
-                'name' => $column['name'],
-                'type' => $this->getType($column['type']),
-                'hidden' => false,
-                'indexed' => false,
-                'description' => null,
-                'import' => true,
-                'isCustom' => false,
-                'expression' => null,
-            ];
-            $reformatColumn = array_merge($reformatColumn, $this->getLength($column['size']));
-
-            $reformatColumns[] = $reformatColumn;
-        }
-        return $reformatColumns;
-    }
-
-    private function getType(string $type): int
-    {
-        switch (strtoupper($type)) {
-            case 'BIGINT':
-                return 0;
-            case 'BIT':
-                return 2;
-            case 'CHAR':
-                return 3;
-            case 'DATE':
-                return 31;
-            case 'DATETIME':
-                return 4;
-            case 'DECIMAL':
-                return 5;
-            case 'FLOAT':
-                return 6;
-            case 'INT':
-            case 'INTEGER':
-                return 8;
-            case 'SMALLINT':
-                return 16;
-            case 'TEXT':
-                return 18;
-            case 'TIME':
-                return 32;
-            case 'TIMESTAMP':
-                return 19;
-            case 'TINYINT':
-                return 20;
-            case 'VARCHAR':
-                return 22;
-            default:
-                throw new UserException(sprintf('Unrecognized column type "%s"', $type));
-        }
-    }
-
-    private function getLength(string $length): array
-    {
-        if (strpos($length, ',')) {
-            $size = 0;
-            [$precision, $scale] = explode(',', $length);
-        } else {
-            $size = (int) $length;
-            $precision = 0;
-            $scale = 0;
-        }
-
-        return [
-            'size' => $size,
-            'precision' => $precision,
-            'scale' => $scale,
-        ];
     }
 }
