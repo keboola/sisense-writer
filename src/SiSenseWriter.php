@@ -51,7 +51,7 @@ class SiSenseWriter
     {
         $datamodel = $this->api->getDatamodel($this->config->getDatamodelName());
         if (is_null($datamodel)) {
-            $this->logger->info(sprintf('Create new datamodel "%s"', $this->config->getDatamodelName()));
+            $this->logger->info(sprintf('Creating new datamodel "%s"', $this->config->getDatamodelName()));
             $datamodel = $this->api->createDatamodel($this->config->getDatamodelName());
         } else {
             $this->logger->info(sprintf('Update existing datamodel "%s"', $datamodel['title']));
@@ -69,7 +69,7 @@ class SiSenseWriter
             )
         );
         if (is_null($dataset)) {
-            $this->logger->info(sprintf('Create new dataset "%s"', $this->config->getTableId()));
+            $this->logger->info(sprintf('Creating new dataset "%s"', $this->config->getTableId()));
             $dataset = $this->api->createDataset(
                 $datamodel['oid'],
                 $this->api->getDatasetName(
@@ -95,7 +95,7 @@ class SiSenseWriter
     {
         $table = $this->api->getTable($datamodel['oid'], $dataset['oid'], $this->config->getTableId());
         if (is_null($table)) {
-            $this->logger->info(sprintf('Create new table "%s"', $this->config->getTableId()));
+            $this->logger->info(sprintf('Creating new table "%s"', $this->config->getTableId()));
             $table = $this->api->createTable(
                 $datamodel['oid'],
                 $dataset['oid'],
@@ -135,7 +135,7 @@ class SiSenseWriter
                     return false;
                 })
             );
-            $this->logger->info('Create relationship');
+            $this->logger->info('Creating relationship');
             $this->api->createRelationship(
                 $datamodel['oid'],
                 [
