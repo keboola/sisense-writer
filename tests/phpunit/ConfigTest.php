@@ -105,7 +105,7 @@ class ConfigTest extends TestCase
             ],
         ];
         $config = new Config($configArray, new ConfigDefinition());
-        Assert::assertEquals('http://xxx:xxx', $config->getUrlAddress());
+        Assert::assertEquals('https://xxx:xxx', $config->getUrlAddress());
     }
 
     public function missingNodeProvider(): array
