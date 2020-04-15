@@ -163,10 +163,7 @@ class Api
 
         $responseJson = json_decode($response->getBody()->getContents(), true);
         $filteredResponse = array_values(array_filter($responseJson, function ($item) use ($datasetName) {
-            if ($item['name'] === $datasetName) {
-                return true;
-            }
-            return false;
+            return $item['name'] === $datasetName;
         }));
         if (count($filteredResponse) === 0) {
             return null;
@@ -312,18 +309,12 @@ class Api
             return null;
         }
         $filteredDatasets = array_values(array_filter($responseJson, function ($dataset) use ($datasetId) {
-            if ($dataset['oid'] === $datasetId) {
-                return true;
-            }
-            return false;
+            return $dataset['oid'] === $datasetId;
         }));
 
         $tablesInDataset = $filteredDatasets[0]['schema']['tables'];
         $filteredTables = array_values(array_filter($tablesInDataset, function ($table) use ($tableId) {
-            if ($table['id'] === $tableId) {
-                return true;
-            }
-            return false;
+            return $table['id'] === $tableId;
         }));
 
         if (count($filteredTables) === 0) {
@@ -354,10 +345,7 @@ class Api
         foreach (json_decode($response->getBody()->getContents(), true) as $dataset) {
             $filteredTables = array_values(
                 array_filter($dataset['schema']['tables'], function ($table) use ($tableName) {
-                    if ($table['id'] === $tableName) {
-                        return true;
-                    }
-                    return false;
+                    return $table['id'] === $tableName;
                 })
             );
             if ($filteredTables) {
