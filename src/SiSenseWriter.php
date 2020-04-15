@@ -49,7 +49,7 @@ class SiSenseWriter
 
     private function createAndGetDatamodel(): array
     {
-        $datamodel = $this->api->checkDatamodelExists($this->config->getDatamodelName());
+        $datamodel = $this->api->getDatamodel($this->config->getDatamodelName());
         if (is_null($datamodel)) {
             $this->logger->info(sprintf('Create new datamodel "%s"', $this->config->getDatamodelName()));
             $datamodel = $this->api->createDatamodel($this->config->getDatamodelName());
@@ -61,7 +61,7 @@ class SiSenseWriter
 
     private function createAndGetDataset(array $datamodel, string $csvFile): array
     {
-        $dataset = $this->api->checkDatasetExists(
+        $dataset = $this->api->getDataset(
             $datamodel['oid'],
             $this->api->getDatasetName(
                 $this->config->getDatamodelName(),
@@ -93,7 +93,7 @@ class SiSenseWriter
 
     private function createAndGetTable(array $datamodel, array $dataset): array
     {
-        $table = $this->api->checkTableExists($datamodel['oid'], $dataset['oid'], $this->config->getTableId());
+        $table = $this->api->getTable($datamodel['oid'], $dataset['oid'], $this->config->getTableId());
         if (is_null($table)) {
             $this->logger->info(sprintf('Create new table "%s"', $this->config->getTableId()));
             $table = $this->api->createTable(
@@ -158,7 +158,7 @@ class SiSenseWriter
         $buildId = $this->api->build($datamodel['oid'], 'full');
         $oldBuildStatus = $buildStatus = null;
         while (in_array($buildStatus, [null, 'waiting', 'building'])) {
-            $buildStatus = $this->api->checkBuild($buildId);
+            $buildStatus = $this->api->getBuildStatus($buildId);
             if ($buildStatus === 'failed') {
                 $this->logger->alert(sprintf('Build data with status "%s"', $buildStatus));
                 $sisenceFailedUrl = $this->config->getUrlAddress() . '/app/data/cubes/' . $datamodel['oid'];

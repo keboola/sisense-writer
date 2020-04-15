@@ -84,7 +84,7 @@ class Api
         return $responseJson[0]['storageInfo']['path'];
     }
 
-    public function checkDatamodelExists(string $datamodelName): ?array
+    public function getDatamodel(string $datamodelName): ?array
     {
         try {
             $response = $this->client->get(
@@ -142,7 +142,7 @@ class Api
         }
     }
 
-    public function checkDatasetExists(string $datamodelId, string $datasetName): ?array
+    public function getDataset(string $datamodelId, string $datasetName): ?array
     {
         try {
             $response = $this->client->get(
@@ -285,7 +285,7 @@ class Api
         }
     }
 
-    public function checkTableExists(string $datamodelId, string $datasetId, string $tableId): ?array
+    public function getTable(string $datamodelId, string $datasetId, string $tableId): ?array
     {
         try {
             $response = $this->client->get(
@@ -464,7 +464,7 @@ class Api
         return $responseJson['oid'];
     }
 
-    public function checkBuild(string $buildId): ?string
+    public function getBuildStatus(string $buildId): ?string
     {
         $response = $this->client->get(
             sprintf(

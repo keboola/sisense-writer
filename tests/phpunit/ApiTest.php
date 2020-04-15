@@ -109,7 +109,7 @@ class ApiTest extends TestCase
 
         $createDatamodel = $api->createDatamodel($datamodelName);
 
-        $existsDatamodel = $api->checkDatamodelExists($datamodelName);
+        $existsDatamodel = $api->getDatamodel($datamodelName);
 
         unset($createDatamodel['lastSuccessfulBuildTime']);
         $this->assertNotNull($createDatamodel);
@@ -124,7 +124,7 @@ class ApiTest extends TestCase
         $api = $this->getApiConnection();
         $api->login();
 
-        $invalidDatamodel = $api->checkDatamodelExists('invalidDatamodel');
+        $invalidDatamodel = $api->getDatamodel('invalidDatamodel');
         $this->assertNull($invalidDatamodel);
     }
 
@@ -202,7 +202,7 @@ class ApiTest extends TestCase
 
         $datasetName = uniqid('dataset-');
         $createDataset = $api->createDataset($datamodel['oid'], $datasetName, $sisenseFile, $csvFile->getFilename());
-        $existsDataset = $api->checkDatasetExists($datamodel['oid'], $datasetName);
+        $existsDataset = $api->getDataset($datamodel['oid'], $datasetName);
 
         $this->assertNotNull($createDataset);
         $this->assertNotNull($existsDataset);
@@ -218,7 +218,7 @@ class ApiTest extends TestCase
         $api->login();
 
         $datamodel = $api->createDatamodel(uniqid('datamodel-'));
-        $invalidDataset = $api->checkDatasetExists($datamodel['oid'], 'invalidDataset');
+        $invalidDataset = $api->getDataset($datamodel['oid'], 'invalidDataset');
         $this->assertNull($invalidDataset);
 
         $api->deleteDatamodel($datamodel['oid']);
@@ -316,7 +316,7 @@ class ApiTest extends TestCase
             $data['columns']
         );
 
-        $existsTable = $api->checkTableExists(
+        $existsTable = $api->getTable(
             $data['datamodel']['oid'],
             $data['dataset']['oid'],
             $tableName
@@ -380,7 +380,7 @@ class ApiTest extends TestCase
 
         $tableName = uniqid('table');
 
-        $existsTable = $api->checkTableExists(
+        $existsTable = $api->getTable(
             $data['datamodel']['oid'],
             $data['dataset']['oid'],
             $tableName
@@ -525,7 +525,7 @@ class ApiTest extends TestCase
             ];
         }, $csvReader->getHeader());
 
-        $datamodel = $api->checkDatamodelExists($datamodelName);
+        $datamodel = $api->getDatamodel($datamodelName);
         if (is_null($datamodel)) {
             $datamodel = $api->createDatamodel($datamodelName);
         }
