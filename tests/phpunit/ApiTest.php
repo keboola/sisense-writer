@@ -69,9 +69,8 @@ class ApiTest extends TestCase
         try {
             $datamodel = $api->createDatamodel(uniqid('datamodel-'));
             Assert::assertNotEmpty($datamodel);
-            Assert::assertArrayHasKey('oid', $datamodel);
         } finally {
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -99,7 +98,7 @@ class ApiTest extends TestCase
                 getenv('SISENSE_PORT')
             ), $exception->getMessage());
         } finally {
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -114,12 +113,11 @@ class ApiTest extends TestCase
             $createDatamodel = $api->createDatamodel($datamodelName);
             $existsDatamodel = $api->getDatamodel($datamodelName);
 
-            unset($createDatamodel['lastSuccessfulBuildTime']);
             Assert::assertNotNull($createDatamodel);
             Assert::assertNotNull($existsDatamodel);
             Assert::assertEquals($createDatamodel, $existsDatamodel);
         } finally {
-            $api->deleteDatamodel($createDatamodel['oid']);
+            $api->deleteDatamodel($createDatamodel->getOid());
         }
     }
 
@@ -147,17 +145,16 @@ class ApiTest extends TestCase
             );
 
             $dataset = $api->createDataset(
-                $datamodel['oid'],
+                $datamodel->getOid(),
                 uniqid('dataset-'),
                 $sisenseFile,
                 $csvFile->getFilename()
             );
 
             Assert::assertNotEmpty($dataset);
-            Assert::assertArrayHasKey('oid', $dataset);
         } finally {
-            $api->deleteDataset($datamodel['oid'], $dataset['oid']);
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDataset($datamodel->getOid(), $dataset->getOid());
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -175,8 +172,8 @@ class ApiTest extends TestCase
             );
 
             $datasetName = uniqid('dataset-');
-            $dataset = $api->createDataset($datamodel['oid'], $datasetName, $sisenseFile, $csvFile->getFilename());
-            $api->createDataset($datamodel['oid'], $datasetName, $sisenseFile, $csvFile->getFilename());
+            $dataset = $api->createDataset($datamodel->getOid(), $datasetName, $sisenseFile, $csvFile->getFilename());
+            $api->createDataset($datamodel->getOid(), $datasetName, $sisenseFile, $csvFile->getFilename());
             $this->fail('Cannot create duplicity dataset name failed');
         } catch (UserException $exception) {
             //phpcs:disable Generic.Files.LineLength
@@ -188,13 +185,13 @@ class ApiTest extends TestCase
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
-                $datamodel['oid']
+                $datamodel->getOid()
             ), $exception->getMessage());
         } finally {
-            if (isset($dataset['oid'])) {
-                $api->deleteDataset($datamodel['oid'], $dataset['oid']);
+            if (isset($dataset)) {
+                $api->deleteDataset($datamodel->getOid(), $dataset->getOid());
             }
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -214,19 +211,19 @@ class ApiTest extends TestCase
 
             $datasetName = uniqid('dataset-');
             $createDataset = $api->createDataset(
-                $datamodel['oid'],
+                $datamodel->getOid(),
                 $datasetName,
                 $sisenseFile,
                 $csvFile->getFilename()
             );
-            $existsDataset = $api->getDataset($datamodel['oid'], $datasetName);
+            $existsDataset = $api->getDataset($datamodel->getOid(), $datasetName);
 
             Assert::assertNotNull($createDataset);
             Assert::assertNotNull($existsDataset);
             Assert::assertEquals($createDataset, $existsDataset);
         } finally {
-            $api->deleteDataset($datamodel['oid'], $createDataset['oid']);
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDataset($datamodel->getOid(), $createDataset->getOid());
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -237,10 +234,10 @@ class ApiTest extends TestCase
 
         try {
             $datamodel = $api->createDatamodel(uniqid('datamodel-'));
-            $invalidDataset = $api->getDataset($datamodel['oid'], 'invalidDataset');
+            $invalidDataset = $api->getDataset($datamodel->getOid(), 'invalidDataset');
             Assert::assertNull($invalidDataset);
         } finally {
-            $api->deleteDatamodel($datamodel['oid']);
+            $api->deleteDatamodel($datamodel->getOid());
         }
     }
 
@@ -278,18 +275,18 @@ class ApiTest extends TestCase
             $data = $this->createDatamodelAndDataset($api);
 
             $table = $api->createTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 uniqid('table'),
                 $data['columns']
             );
 
-            Assert::assertArrayHasKey('oid', $table);
-            Assert::assertArrayHasKey('columns', $table);
-            Assert::assertCount(count($data['columns']), $table['columns']);
+            Assert::assertNotEmpty($table->getOid());
+            Assert::assertNotEmpty($table->getColumns());
+            Assert::assertCount(count($data['columns']), $table->getColumns());
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -302,25 +299,25 @@ class ApiTest extends TestCase
             $data = $this->createDatamodelAndDataset($api);
 
             $createTable = $api->createTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 uniqid('table'),
                 $data['columns']
             );
 
             $updateTable = $api->updateTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
-                $createTable['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
+                $createTable->getOid(),
                 $data['columns']
             );
 
-            Assert::assertArrayHasKey('oid', $updateTable);
-            Assert::assertArrayHasKey('columns', $updateTable);
-            Assert::assertCount(count($data['columns']), $updateTable['columns']);
+            Assert::assertNotEmpty($updateTable->getOid());
+            Assert::assertNotEmpty($updateTable->getColumns());
+            Assert::assertCount(count($data['columns']), $updateTable->getColumns());
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -335,23 +332,23 @@ class ApiTest extends TestCase
             $tableName = uniqid('table');
 
             $createTable = $api->createTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 $tableName,
                 $data['columns']
             );
 
             $existsTable = $api->getTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 $tableName
             );
 
             Assert::assertNotNull($existsTable);
             Assert::assertEquals($createTable, $existsTable);
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -363,22 +360,22 @@ class ApiTest extends TestCase
         try {
             $data = $this->createDatamodelAndDataset($api);
 
-            $tableName = uniqid('table');
+            $tableName = uniqid('table-');
             $createTable = $api->createTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 $tableName,
                 $data['columns']
             );
 
-            $findTable = $api->getTableByName($data['datamodel']['oid'], $tableName);
+            $findTable = $api->getTableByName($data['datamodel']->getOid(), $tableName);
 
             Assert::assertNotNull($findTable);
             Assert::assertNotNull($findTable['table']);
             Assert::assertEquals($createTable, $findTable['table']);
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -391,14 +388,14 @@ class ApiTest extends TestCase
             $data = $this->createDatamodelAndDataset($api);
 
             try {
-                $api->getTableByName($data['datamodel']['oid'], 'unexists-table');
+                $api->getTableByName($data['datamodel']->getOid(), 'unexists-table');
                 $this->fail('Cannot find table name failed');
             } catch (UserException $exception) {
                 Assert::assertEquals('Cannot find table "unexists-table"', $exception->getMessage());
             }
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -413,15 +410,15 @@ class ApiTest extends TestCase
             $tableName = uniqid('table');
 
             $existsTable = $api->getTable(
-                $data['datamodel']['oid'],
-                $data['dataset']['oid'],
+                $data['datamodel']->getOid(),
+                $data['dataset']->getOid(),
                 $tableName
             );
 
             Assert::assertNull($existsTable);
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -436,7 +433,7 @@ class ApiTest extends TestCase
         try {
             $api->createTable(
                 'invalid-datamodel',
-                $data['dataset']['oid'],
+                $data['dataset']->getOid(),
                 $tableName,
                 $data['columns']
             );
@@ -450,11 +447,11 @@ class ApiTest extends TestCase
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
-                $data['dataset']['oid']
+                $data['dataset']->getOid()
             ), $exception->getMessage());
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -469,7 +466,7 @@ class ApiTest extends TestCase
 
         try {
             $api->createTable(
-                $data['datamodel']['oid'],
+                $data['datamodel']->getOid(),
                 'invalid-dataset',
                 $tableName,
                 $data['columns']
@@ -484,11 +481,11 @@ class ApiTest extends TestCase
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
-                $data['datamodel']['oid']
+                $data['datamodel']->getOid()
             ), $exception->getMessage());
         } finally {
-            $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
-            $api->deleteDatamodel($data['datamodel']['oid']);
+            $api->deleteDataset($data['datamodel']->getOid(), $data['dataset']->getOid());
+            $api->deleteDatamodel($data['datamodel']->getOid());
         }
     }
 
@@ -500,32 +497,32 @@ class ApiTest extends TestCase
         try {
             $firstData = $this->createDatamodelAndDataset($api);
             $firstTable = $api->createTable(
-                $firstData['datamodel']['oid'],
-                $firstData['dataset']['oid'],
+                $firstData['datamodel']->getOid(),
+                $firstData['dataset']->getOid(),
                 uniqid('table-'),
                 $firstData['columns']
             );
-            $secondData = $this->createDatamodelAndDataset($api, $firstData['datamodel']['title']);
+            $secondData = $this->createDatamodelAndDataset($api, $firstData['datamodel']->getTitle());
             $secondTable = $api->createTable(
-                $secondData['datamodel']['oid'],
-                $secondData['dataset']['oid'],
+                $secondData['datamodel']->getOid(),
+                $secondData['dataset']->getOid(),
                 uniqid('table-'),
                 $secondData['columns']
             );
 
             $sourceColumn = [
-                'dataset' => $firstData['dataset']['oid'],
-                'table' => $firstTable['oid'],
-                'column' => $firstTable['columns'][0]['oid'],
+                'dataset' => $firstData['dataset']->getOid(),
+                'table' => $firstTable->getOid(),
+                'column' => $firstTable->getColumns()[0]->getOid(),
             ];
             $targetColumn = [
-                'dataset' => $secondData['dataset']['oid'],
-                'table' => $secondTable['oid'],
-                'column' => $secondTable['columns'][0]['oid'],
+                'dataset' => $secondData['dataset']->getOid(),
+                'table' => $secondTable->getOid(),
+                'column' => $secondTable->getColumns()[0]->getOid(),
             ];
 
             $relationship = $api->createRelationship(
-                $firstData['datamodel']['oid'],
+                $firstData['datamodel']->getOid(),
                 $sourceColumn,
                 $targetColumn,
             );
@@ -533,9 +530,9 @@ class ApiTest extends TestCase
             Assert::assertNotEmpty($relationship);
             Assert::assertEquals([$sourceColumn, $targetColumn], $relationship['columns']);
         } finally {
-            $api->deleteDataset($secondData['datamodel']['oid'], $secondData['dataset']['oid']);
-            $api->deleteDataset($firstData['datamodel']['oid'], $firstData['dataset']['oid']);
-            $api->deleteDatamodel($firstData['datamodel']['oid']);
+            $api->deleteDataset($secondData['datamodel']->getOid(), $secondData['dataset']->getOid());
+            $api->deleteDataset($firstData['datamodel']->getOid(), $firstData['dataset']->getOid());
+            $api->deleteDatamodel($firstData['datamodel']->getOid());
         }
     }
 
@@ -563,7 +560,7 @@ class ApiTest extends TestCase
         if (is_null($datamodel)) {
             $datamodel = $api->createDatamodel($datamodelName);
         }
-        $dataset = $api->createDataset($datamodel['oid'], uniqid('dataset-'), $sisenseFile, $csvFile->getFilename());
+        $dataset = $api->createDataset($datamodel->getOid(), uniqid('dataset-'), $sisenseFile, $csvFile->getFilename());
 
         return [
             'datamodel' => $datamodel,

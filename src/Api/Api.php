@@ -10,6 +10,9 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 use Keboola\Component\UserException;
+use Keboola\SiSenseWriter\Api\Model\Datamodel;
+use Keboola\SiSenseWriter\Api\Model\Dataset;
+use Keboola\SiSenseWriter\Api\Model\Table;
 use Keboola\SiSenseWriter\Config;
 use Psr\Http\Message\ResponseInterface;
 
@@ -84,7 +87,7 @@ class Api
         return $responseJson[0]['storageInfo']['path'];
     }
 
-    public function getDatamodel(string $datamodelName): ?array
+    public function getDatamodel(string $datamodelName): ?Datamodel
     {
         try {
             $response = $this->clientGetRequest(
@@ -97,10 +100,10 @@ class Api
             return null;
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Datamodel::build($response);
     }
 
-    public function createDatamodel(string $datamodelName): array
+    public function createDatamodel(string $datamodelName): Datamodel
     {
         try {
             $response = $this->clientPostRequest(
@@ -113,7 +116,7 @@ class Api
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Datamodel::build($response);
     }
 
     public function deleteDatamodel(string $datamodelId): void
@@ -125,7 +128,7 @@ class Api
         }
     }
 
-    public function getDataset(string $datamodelId, string $datasetName): ?array
+    public function getDataset(string $datamodelId, string $datasetName): ?Dataset
     {
         try {
             $response = $this->clientGetRequest(sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId));
@@ -133,15 +136,14 @@ class Api
             return null;
         }
 
-        $responseJson = json_decode($response->getBody()->getContents(), true);
-        $filteredResponse = array_values(array_filter($responseJson, function ($item) use ($datasetName) {
+        $filteredResponse = array_values(array_filter($response, function ($item) use ($datasetName) {
             return $item['name'] === $datasetName;
         }));
         if (count($filteredResponse) === 0) {
             return null;
         }
 
-        return $filteredResponse[0];
+        return Dataset::build($filteredResponse[0]);
     }
 
     public function createDataset(
@@ -149,7 +151,7 @@ class Api
         string $datasetName,
         string $csvFilePath,
         string $filename
-    ): array {
+    ): Dataset {
         $connection = [
             'provider' => 'CSV',
             'schema' => $csvFilePath,
@@ -178,7 +180,7 @@ class Api
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Dataset::build($response);
     }
 
     public function updateDataset(
@@ -186,7 +188,7 @@ class Api
         string $datasetId,
         string $csvFilePath,
         string $filename
-    ): array {
+    ): Dataset {
         $connection = [
             'provider' => 'CSV',
             'schema' => $csvFilePath,
@@ -214,7 +216,7 @@ class Api
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Dataset::build($response);
     }
 
     public function deleteDataset(string $datamodelId, string $datasetId): void
@@ -230,7 +232,7 @@ class Api
         }
     }
 
-    public function getTable(string $datamodelId, string $datasetId, string $tableId): ?array
+    public function getTable(string $datamodelId, string $datasetId, string $tableId): ?Table
     {
         try {
             $response = $this->clientGetRequest(sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId));
@@ -238,11 +240,10 @@ class Api
             return null;
         }
 
-        $responseJson = json_decode($response->getBody()->getContents(), true);
-        if (count($responseJson) === 0) {
+        if (count($response) === 0) {
             return null;
         }
-        $filteredDatasets = array_values(array_filter($responseJson, function ($dataset) use ($datasetId) {
+        $filteredDatasets = array_values(array_filter($response, function ($dataset) use ($datasetId) {
             return $dataset['oid'] === $datasetId;
         }));
 
@@ -255,7 +256,7 @@ class Api
             return null;
         }
 
-        return $filteredTables[0];
+        return Table::build($filteredTables[0]);
     }
 
     public function getTableByName(string $datamodelId, string $tableName): array
@@ -263,13 +264,13 @@ class Api
         try {
             $response = $this->clientGetRequest(
                 sprintf('/api/v2/datamodels/%s/schema/datasets', $datamodelId),
-                ['fields' => 'oid, schema']
+                ['fields' => 'oid, name, schema']
             );
         } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        foreach (json_decode($response->getBody()->getContents(), true) as $dataset) {
+        foreach ($response as $dataset) {
             $filteredTables = array_values(
                 array_filter($dataset['schema']['tables'], function ($table) use ($tableName) {
                     return $table['id'] === $tableName;
@@ -277,8 +278,8 @@ class Api
             );
             if ($filteredTables) {
                 return [
-                    'dataset_oid' => $dataset['oid'],
-                    'table' => $filteredTables[0],
+                    'dataset' => Dataset::build($dataset),
+                    'table' => Table::build($filteredTables[0]),
                 ];
             }
         }
@@ -286,7 +287,7 @@ class Api
         throw new UserException(sprintf('Cannot find table "%s"', $tableName));
     }
 
-    public function createTable(string $datamodelId, string $datasetId, string $tableId, array $columns): array
+    public function createTable(string $datamodelId, string $datasetId, string $tableId, array $columns): Table
     {
         try {
             $response = $this->clientPostRequest(
@@ -300,10 +301,10 @@ class Api
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Table::build($response);
     }
 
-    public function updateTable(string $datamodelId, string $datasetId, string $tableId, array $columns): array
+    public function updateTable(string $datamodelId, string $datasetId, string $tableId, array $columns): Table
     {
         try {
             $response = $this->clientPatchRequest(
@@ -321,13 +322,13 @@ class Api
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        return json_decode($response->getBody()->getContents(), true);
+        return Table::build($response);
     }
 
     public function createRelationship(string $datamodelId, array $sourceData, array $targetData): array
     {
         try {
-            $response = $this->clientPostRequest(
+            return $this->clientPostRequest(
                 sprintf('/api/v2/datamodels/%s/schema/relations', $datamodelId),
                 [
                     'columns' => [
@@ -339,8 +340,6 @@ class Api
         } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function build(string $datamodelId, string $type): string
@@ -353,16 +352,13 @@ class Api
                 'rowLimit' => 0,
             ]
         );
-
-        $responseJson = json_decode($response->getBody()->getContents(), true);
-        return $responseJson['oid'];
+        return $response['oid'];
     }
 
     public function getBuildStatus(string $buildId): ?string
     {
         $response = $this->clientGetRequest(sprintf('/api/v2/builds/%s', $buildId));
-        $responseJson = json_decode($response->getBody()->getContents(), true);
-        return is_null($responseJson['status']) ? 'waiting' : $responseJson['status'];
+        return is_null($response['status']) ? 'waiting' : $response['status'];
     }
 
     public function getDatasetName(string $datamodelName, string $tableName): string
@@ -370,7 +366,7 @@ class Api
         return sprintf('%s-%s', $datamodelName, $tableName);
     }
 
-    private function clientGetRequest(string $uri, array $query = [], array $headers = []): ResponseInterface
+    private function clientGetRequest(string $uri, array $query = [], array $headers = []): array
     {
         $options = [
             'headers' => $this->getHeaders($headers),
@@ -378,34 +374,37 @@ class Api
         if ($query) {
             $options['query'] = $query;
         }
-        return $this->client->get(
+        $response = $this->client->get(
             $this->config->getUrlAddress() . $uri,
             $options
         );
+        return json_decode($response->getBody()->getContents(), true);
     }
 
-    private function clientPostRequest(string $uri, array $json, array $headers = []): ResponseInterface
+    private function clientPostRequest(string $uri, array $json, array $headers = []): array
     {
         $options = [
             'headers' => $this->getHeaders($headers),
             'json' => $json,
         ];
-        return $this->client->post(
+        $response = $this->client->post(
             $this->config->getUrlAddress() . $uri,
             $options
         );
+        return json_decode($response->getBody()->getContents(), true);
     }
 
-    private function clientPatchRequest(string $uri, array $json, array $headers = []): ResponseInterface
+    private function clientPatchRequest(string $uri, array $json, array $headers = []): array
     {
         $options = [
             'headers' => $this->getHeaders($headers),
             'json' => $json,
         ];
-        return $this->client->patch(
+        $response = $this->client->patch(
             $this->config->getUrlAddress() . $uri,
             $options
         );
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     private function clientDeleteRequest(string $uri): ResponseInterface
@@ -427,11 +426,14 @@ class Api
     private function validateFile(string $dataDir, string $filename): string
     {
         try {
-            $response = $this->clientPostRequest(
-                '/storage/fs/validate_file',
+            $response = $this->client->post(
+                sprintf('%s/storage/fs/validate_file', $this->config->getUrlAddress()),
                 [
-                    'filename' => $filename,
-                    'size' => filesize($dataDir . $filename),
+                    'headers' => $this->getHeaders(),
+                    'json' => [
+                        'filename' => $filename,
+                        'size' => filesize($dataDir . $filename),
+                    ],
                 ]
             );
         } catch (ClientException $exception) {

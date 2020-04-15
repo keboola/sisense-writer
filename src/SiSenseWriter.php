@@ -6,6 +6,10 @@ namespace Keboola\SiSenseWriter;
 
 use Keboola\Component\UserException;
 use Keboola\SiSenseWriter\Api\Api;
+use Keboola\SiSenseWriter\Api\Model\Datamodel;
+use Keboola\SiSenseWriter\Api\Model\Dataset;
+use Keboola\SiSenseWriter\Api\Model\Table;
+use Keboola\SiSenseWriter\Api\Model\TableColumn;
 use Psr\Log\LoggerInterface;
 
 class SiSenseWriter
@@ -48,22 +52,22 @@ class SiSenseWriter
         $this->buildData($datamodel);
     }
 
-    private function createAndGetDatamodel(): array
+    private function createAndGetDatamodel(): Datamodel
     {
         $datamodel = $this->api->getDatamodel($this->config->getDatamodelName());
         if (is_null($datamodel)) {
             $this->logger->info(sprintf('Creating new datamodel "%s"', $this->config->getDatamodelName()));
             $datamodel = $this->api->createDatamodel($this->config->getDatamodelName());
         } else {
-            $this->logger->info(sprintf('Update existing datamodel "%s"', $datamodel['title']));
+            $this->logger->info(sprintf('Update existing datamodel "%s"', $datamodel->getTitle()));
         }
         return $datamodel;
     }
 
-    private function createAndGetDataset(array $datamodel, string $csvFile): array
+    private function createAndGetDataset(Datamodel $datamodel, string $csvFile): Dataset
     {
         $dataset = $this->api->getDataset(
-            $datamodel['oid'],
+            $datamodel->getOid(),
             $this->api->getDatasetName(
                 $this->config->getDatamodelName(),
                 $this->config->getTableId()
@@ -72,7 +76,7 @@ class SiSenseWriter
         if (is_null($dataset)) {
             $this->logger->info(sprintf('Creating new dataset "%s"', $this->config->getTableId()));
             $dataset = $this->api->createDataset(
-                $datamodel['oid'],
+                $datamodel->getOid(),
                 $this->api->getDatasetName(
                     $this->config->getDatamodelName(),
                     $this->config->getTableId()
@@ -81,10 +85,10 @@ class SiSenseWriter
                 sprintf('%s.csv', $this->config->getTableId())
             );
         } else {
-            $this->logger->info(sprintf('Update existing dataset "%s"', $dataset['name']));
+            $this->logger->info(sprintf('Update existing dataset "%s"', $dataset->getName()));
             $dataset = $this->api->updateDataset(
-                $datamodel['oid'],
-                $dataset['oid'],
+                $datamodel->getOid(),
+                $dataset->getOid(),
                 $csvFile,
                 sprintf('%s.csv', $this->config->getTableId())
             );
@@ -92,77 +96,76 @@ class SiSenseWriter
         return $dataset;
     }
 
-    private function createAndGetTable(array $datamodel, array $dataset): array
+    private function createAndGetTable(Datamodel $datamodel, Dataset $dataset): Table
     {
-        $table = $this->api->getTable($datamodel['oid'], $dataset['oid'], $this->config->getTableId());
+        $table = $this->api->getTable($datamodel->getOid(), $dataset->getOid(), $this->config->getTableId());
         if (is_null($table)) {
             $this->logger->info(sprintf('Creating new table "%s"', $this->config->getTableId()));
             $table = $this->api->createTable(
-                $datamodel['oid'],
-                $dataset['oid'],
+                $datamodel->getOid(),
+                $dataset->getOid(),
                 $this->config->getTableId(),
                 $this->config->getColumns()
             );
         } else {
-            $this->logger->info(sprintf('Update existing table "%s"', $table['name']));
+            $this->logger->info(sprintf('Update existing table "%s"', $table->getName()));
             $table = $this->api->updateTable(
-                $datamodel['oid'],
-                $dataset['oid'],
-                $table['oid'],
+                $datamodel->getOid(),
+                $dataset->getOid(),
+                $table->getOid(),
                 $this->config->getColumns()
             );
         }
         return $table;
     }
 
-    private function createRelationships(array $datamodel, array $dataset, array $sourceTable): void
+    private function createRelationships(Datamodel $datamodel, Dataset $sourceDataset, Table $sourceTable): void
     {
         foreach ($this->config->getRelationships() as $relationship) {
-            $destinationTable = $this->api->getTableByName($datamodel['oid'], $relationship['target']['table']);
+            $destinationData = $this->api->getTableByName($datamodel->getOid(), $relationship['target']['table']);
+            /** @var Dataset $destinationDataset */
+            $destinationDataset = $destinationData['dataset'];
+            /** @var Table $destinationTable */
+            $destinationTable = $destinationData['table'];
+
             $sourceColumn = array_values(
-                array_filter($sourceTable['columns'], function ($column) use ($relationship) {
-                    if ($relationship['column'] === $column['id']) {
-                        return true;
-                    }
-                    return false;
+                array_filter($sourceTable->getColumns(), function (TableColumn $column) use ($relationship) {
+                    return $relationship['column'] === $column->getOid();
                 })
             );
 
             $destinationColumn = array_values(
-                array_filter($destinationTable['table']['columns'], function ($column) use ($relationship) {
-                    if ($relationship['target']['column'] === $column['id']) {
-                        return true;
-                    }
-                    return false;
+                array_filter($destinationTable->getColumns(), function (TableColumn $column) use ($relationship) {
+                    return $relationship['target']['column'] === $column->getOid();
                 })
             );
             $this->logger->info('Creating relationship');
             $this->api->createRelationship(
-                $datamodel['oid'],
+                $datamodel->getOid(),
                 [
-                    'dataset' => $dataset['oid'],
-                    'table' => $sourceTable['oid'],
+                    'dataset' => $sourceDataset->getOid(),
+                    'table' => $sourceTable->getOid(),
                     'column' => $sourceColumn[0]['oid'],
                 ],
                 [
-                    'dataset' => $destinationTable['dataset_oid'],
-                    'table' => $destinationTable['table']['oid'],
+                    'dataset' => $destinationDataset->getOid(),
+                    'table' => $destinationTable->getOid(),
                     'column' => $destinationColumn[0]['oid'],
                 ]
             );
         }
     }
 
-    private function buildData(array $datamodel): void
+    private function buildData(Datamodel $datamodel): void
     {
         $this->logger->info('Start build data');
-        $buildId = $this->api->build($datamodel['oid'], 'full');
+        $buildId = $this->api->build($datamodel->getOid(), 'full');
         $oldBuildStatus = $buildStatus = null;
         while (in_array($buildStatus, [null, 'waiting', 'building'])) {
             $buildStatus = $this->api->getBuildStatus($buildId);
             if ($buildStatus === 'failed') {
                 $this->logger->alert(sprintf('Build data with status "%s"', $buildStatus));
-                $sisenceFailedUrl = $this->config->getUrlAddress() . '/app/data/cubes/' . $datamodel['oid'];
+                $sisenceFailedUrl = $this->config->getUrlAddress() . '/app/data/cubes/' . $datamodel->getOid();
                 throw new UserException(
                     sprintf('Build failed. Please check the error in "%s"', $sisenceFailedUrl)
                 );
