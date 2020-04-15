@@ -26,14 +26,14 @@ class ApiTest extends TestCase
     public function testInvalidAddress(): void
     {
         $this->expectException(UserException::class);
-        $this->expectExceptionMessage('Could not resolve host "http://invalidhost.cz:30845"');
+        $this->expectExceptionMessage('Could not resolve host "https://invalidhost.cz:30845"');
         $this->getApiConnection(['host' => 'invalidhost.cz'])->login();
     }
 
     public function testInvalidLogin(): void
     {
         //phpcs:disable Generic.Files.LineLength
-        $expectMessage = 'Client error: `POST http://%s:%s/api/v1/authentication/login` resulted in a `401 Unauthorized` response:
+        $expectMessage = 'Client error: `POST %s:%s/api/v1/authentication/login` resulted in a `401 Unauthorized` response:
 {"error":{"code":5001,"message":"Invalid domain.","status":401,"httpMessage":"Unauthorized"}}
 ';
         //phpcs:enable
@@ -88,7 +88,7 @@ class ApiTest extends TestCase
             $this->fail('Cannot create duplicity datamodel name failed');
         } catch (UserException $exception) {
             // phpcs:disable Generic.Files.LineLength
-            $expectedMessage = 'Client error: `POST http://%s:%s/api/v2/datamodels` resulted in a `400 Bad Request` response:
+            $expectedMessage = 'Client error: `POST %s:%s/api/v2/datamodels` resulted in a `400 Bad Request` response:
 {"type":"https://errors.sisense.dev/http/general-error","title":"ElasticubeAlreadyExists","status":400,"sub":1011,"detai (truncated...)
 ';
             // phpcs:enable
@@ -172,7 +172,7 @@ class ApiTest extends TestCase
             $this->fail('Cannot create duplicity dataset name failed');
         } catch (UserException $exception) {
             //phpcs:disable Generic.Files.LineLength
-            $expectedMessage = 'Client error: `POST http://%s:%s/api/v2/datamodels/%s/schema/datasets` resulted in a `400 Bad Request` response:
+            $expectedMessage = 'Client error: `POST %s:%s/api/v2/datamodels/%s/schema/datasets` resulted in a `400 Bad Request` response:
 {"type":"https://errors.sisense.dev/http/validation-error","title":"ValidationError","status":400,"sub":1002,"detail":"V (truncated...)
 ';
             //phpcs:enable
@@ -238,7 +238,7 @@ class ApiTest extends TestCase
 
         $this->expectException(UserException::class);
         //phpcs:disable Generic.Files.LineLength
-        $expectedMessage = 'Client error: `POST http://%s:%s/api/v2/datamodels/invalid-datamodel/schema/datasets` resulted in a `400 Bad Request` response:
+        $expectedMessage = 'Client error: `POST %s:%s/api/v2/datamodels/invalid-datamodel/schema/datasets` resulted in a `400 Bad Request` response:
 {"type":"https://errors.sisense.dev/http/general-error","title":"EcmApiError","status":400,"sub":1012,"detail":"Variable (truncated...)
 ';
         //phpcs:enable
@@ -411,7 +411,7 @@ class ApiTest extends TestCase
             );
         } catch (UserException $exception) {
             //phpcs:disable Generic.Files.LineLength
-            $expectedMessage = 'Client error: `POST http://%s:%s/api/v2/datamodels/invalid-datamodel/schema/datasets/%s/tables` resulted in a `400 Bad Request` response:
+            $expectedMessage = 'Client error: `POST %s:%s/api/v2/datamodels/invalid-datamodel/schema/datasets/%s/tables` resulted in a `400 Bad Request` response:
 {"type":"https://errors.sisense.dev/http/general-error","title":"EcmApiError","status":400,"sub":1012,"detail":"Variable (truncated...)
 ';
             //phpcs:enable
@@ -445,7 +445,7 @@ class ApiTest extends TestCase
             );
         } catch (UserException $exception) {
             //phpcs:disable Generic.Files.LineLength
-            $expectedMessage = 'Client error: `POST http://%s:%s/api/v2/datamodels/%s/schema/datasets/invalid-dataset/tables` resulted in a `400 Bad Request` response:
+            $expectedMessage = 'Client error: `POST %s:%s/api/v2/datamodels/%s/schema/datasets/invalid-dataset/tables` resulted in a `400 Bad Request` response:
 {"type":"https://errors.sisense.dev/http/general-error","title":"EcmApiError","status":400,"sub":1012,"detail":"Variable (truncated...)
 ';
             //phpcs:enable
