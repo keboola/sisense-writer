@@ -11,6 +11,7 @@ use Keboola\Csv\CsvWriter;
 use Keboola\SiSenseWriter\Api;
 use Keboola\SiSenseWriter\Config;
 use Keboola\SiSenseWriter\ConfigDefinition;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
@@ -19,7 +20,7 @@ class ApiTest extends TestCase
     public function testLogin(): void
     {
         $accessToken = $this->getApiConnection()->login();
-        $this->assertNotEmpty($accessToken);
+        Assert::assertNotEmpty($accessToken);
     }
 
     public function testInvalidAddress(): void
@@ -57,7 +58,7 @@ class ApiTest extends TestCase
             $csvFile->getFilename()
         );
 
-        $this->assertStringContainsString('/opt/sisense/storage/datasets/storage/', $sisenseFile);
+        Assert::assertStringContainsString('/opt/sisense/storage/datasets/storage/', $sisenseFile);
     }
 
     public function testCreateDatamodel(): void
@@ -67,8 +68,8 @@ class ApiTest extends TestCase
 
         $datamodel = $api->createDatamodel(uniqid('datamodel-'));
 
-        $this->assertNotEmpty($datamodel);
-        $this->assertArrayHasKey('oid', $datamodel);
+        Assert::assertNotEmpty($datamodel);
+        Assert::assertArrayHasKey('oid', $datamodel);
 
         $api->deleteDatamodel($datamodel['oid']);
     }
@@ -91,7 +92,7 @@ class ApiTest extends TestCase
 {"type":"https://errors.sisense.dev/http/general-error","title":"ElasticubeAlreadyExists","status":400,"sub":1011,"detai (truncated...)
 ';
             // phpcs:enable
-            $this->assertEquals(sprintf(
+            Assert::assertEquals(sprintf(
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT')
@@ -112,9 +113,9 @@ class ApiTest extends TestCase
         $existsDatamodel = $api->getDatamodel($datamodelName);
 
         unset($createDatamodel['lastSuccessfulBuildTime']);
-        $this->assertNotNull($createDatamodel);
-        $this->assertNotNull($existsDatamodel);
-        $this->assertEquals($createDatamodel, $existsDatamodel);
+        Assert::assertNotNull($createDatamodel);
+        Assert::assertNotNull($existsDatamodel);
+        Assert::assertEquals($createDatamodel, $existsDatamodel);
 
         $api->deleteDatamodel($createDatamodel['oid']);
     }
@@ -125,7 +126,7 @@ class ApiTest extends TestCase
         $api->login();
 
         $invalidDatamodel = $api->getDatamodel('invalidDatamodel');
-        $this->assertNull($invalidDatamodel);
+        Assert::assertNull($invalidDatamodel);
     }
 
     public function testCreateDataset(): void
@@ -143,8 +144,8 @@ class ApiTest extends TestCase
 
         $dataset = $api->createDataset($datamodel['oid'], uniqid('dataset-'), $sisenseFile, $csvFile->getFilename());
 
-        $this->assertNotEmpty($dataset);
-        $this->assertArrayHasKey('oid', $dataset);
+        Assert::assertNotEmpty($dataset);
+        Assert::assertArrayHasKey('oid', $dataset);
 
         $api->deleteDataset($datamodel['oid'], $dataset['oid']);
         $api->deleteDatamodel($datamodel['oid']);
@@ -175,7 +176,7 @@ class ApiTest extends TestCase
 {"type":"https://errors.sisense.dev/http/validation-error","title":"ValidationError","status":400,"sub":1002,"detail":"V (truncated...)
 ';
             //phpcs:enable
-            $this->assertEquals(sprintf(
+            Assert::assertEquals(sprintf(
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
@@ -204,9 +205,9 @@ class ApiTest extends TestCase
         $createDataset = $api->createDataset($datamodel['oid'], $datasetName, $sisenseFile, $csvFile->getFilename());
         $existsDataset = $api->getDataset($datamodel['oid'], $datasetName);
 
-        $this->assertNotNull($createDataset);
-        $this->assertNotNull($existsDataset);
-        $this->assertEquals($createDataset, $existsDataset);
+        Assert::assertNotNull($createDataset);
+        Assert::assertNotNull($existsDataset);
+        Assert::assertEquals($createDataset, $existsDataset);
 
         $api->deleteDataset($datamodel['oid'], $createDataset['oid']);
         $api->deleteDatamodel($datamodel['oid']);
@@ -219,7 +220,7 @@ class ApiTest extends TestCase
 
         $datamodel = $api->createDatamodel(uniqid('datamodel-'));
         $invalidDataset = $api->getDataset($datamodel['oid'], 'invalidDataset');
-        $this->assertNull($invalidDataset);
+        Assert::assertNull($invalidDataset);
 
         $api->deleteDatamodel($datamodel['oid']);
     }
@@ -263,9 +264,9 @@ class ApiTest extends TestCase
             $data['columns']
         );
 
-        $this->assertArrayHasKey('oid', $table);
-        $this->assertArrayHasKey('columns', $table);
-        $this->assertCount(count($data['columns']), $table['columns']);
+        Assert::assertArrayHasKey('oid', $table);
+        Assert::assertArrayHasKey('columns', $table);
+        Assert::assertCount(count($data['columns']), $table['columns']);
 
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -292,9 +293,9 @@ class ApiTest extends TestCase
             $data['columns']
         );
 
-        $this->assertArrayHasKey('oid', $updateTable);
-        $this->assertArrayHasKey('columns', $updateTable);
-        $this->assertCount(count($data['columns']), $updateTable['columns']);
+        Assert::assertArrayHasKey('oid', $updateTable);
+        Assert::assertArrayHasKey('columns', $updateTable);
+        Assert::assertCount(count($data['columns']), $updateTable['columns']);
 
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -322,8 +323,8 @@ class ApiTest extends TestCase
             $tableName
         );
 
-        $this->assertNotNull($existsTable);
-        $this->assertEquals($createTable, $existsTable);
+        Assert::assertNotNull($existsTable);
+        Assert::assertEquals($createTable, $existsTable);
 
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -346,9 +347,9 @@ class ApiTest extends TestCase
 
         $findTable = $api->getTableByName($data['datamodel']['oid'], $tableName);
 
-        $this->assertNotNull($findTable);
-        $this->assertNotNull($findTable['table']);
-        $this->assertEquals($createTable, $findTable['table']);
+        Assert::assertNotNull($findTable);
+        Assert::assertNotNull($findTable['table']);
+        Assert::assertEquals($createTable, $findTable['table']);
 
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -365,7 +366,7 @@ class ApiTest extends TestCase
             $api->getTableByName($data['datamodel']['oid'], 'unexists-table');
             $this->fail('Cannot find table name failed');
         } catch (UserException $exception) {
-            $this->assertEquals('Cannot find table "unexists-table"', $exception->getMessage());
+            Assert::assertEquals('Cannot find table "unexists-table"', $exception->getMessage());
         }
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -386,7 +387,7 @@ class ApiTest extends TestCase
             $tableName
         );
 
-        $this->assertNull($existsTable);
+        Assert::assertNull($existsTable);
 
         $api->deleteDataset($data['datamodel']['oid'], $data['dataset']['oid']);
         $api->deleteDatamodel($data['datamodel']['oid']);
@@ -414,7 +415,7 @@ class ApiTest extends TestCase
 {"type":"https://errors.sisense.dev/http/general-error","title":"EcmApiError","status":400,"sub":1012,"detail":"Variable (truncated...)
 ';
             //phpcs:enable
-            $this->assertEquals(sprintf(
+            Assert::assertEquals(sprintf(
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
@@ -448,7 +449,7 @@ class ApiTest extends TestCase
 {"type":"https://errors.sisense.dev/http/general-error","title":"EcmApiError","status":400,"sub":1012,"detail":"Variable (truncated...)
 ';
             //phpcs:enable
-            $this->assertEquals(sprintf(
+            Assert::assertEquals(sprintf(
                 $expectedMessage,
                 getenv('SISENSE_HOST'),
                 getenv('SISENSE_PORT'),
@@ -497,8 +498,8 @@ class ApiTest extends TestCase
             $targetColumn,
         );
 
-        $this->assertNotEmpty($relationship);
-        $this->assertEquals([$sourceColumn, $targetColumn], $relationship['columns']);
+        Assert::assertNotEmpty($relationship);
+        Assert::assertEquals([$sourceColumn, $targetColumn], $relationship['columns']);
 
         $api->deleteDataset($secondData['datamodel']['oid'], $secondData['dataset']['oid']);
         $api->deleteDataset($firstData['datamodel']['oid'], $firstData['dataset']['oid']);

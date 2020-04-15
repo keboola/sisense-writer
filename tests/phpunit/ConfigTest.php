@@ -6,6 +6,7 @@ namespace Keboola\SiSenseWriter\Tests;
 
 use Keboola\SiSenseWriter\Config;
 use Keboola\SiSenseWriter\ConfigDefinition;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
@@ -34,13 +35,13 @@ class ConfigTest extends TestCase
 
         $config = new Config($configArray, new ConfigDefinition());
 
-        $this->assertArrayHasKey('host', $config->getData()['parameters']);
-        $this->assertArrayHasKey('port', $config->getData()['parameters']);
-        $this->assertArrayHasKey('username', $config->getData()['parameters']);
-        $this->assertArrayHasKey('#password', $config->getData()['parameters']);
-        $this->assertArrayHasKey('tableId', $config->getData()['parameters']);
-        $this->assertArrayHasKey('datamodelName', $config->getData()['parameters']);
-        $this->assertArrayHasKey('columns', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('host', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('port', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('username', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('#password', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('tableId', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('datamodelName', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('columns', $config->getData()['parameters']);
     }
 
     public function testDefaultPort(): void
@@ -64,7 +65,7 @@ class ConfigTest extends TestCase
         ];
 
         $config = new Config($configArray, new ConfigDefinition());
-        $this->assertEquals(30845, $config->getPort());
+        Assert::assertEquals(30845, $config->getPort());
     }
 
     /**
@@ -104,7 +105,7 @@ class ConfigTest extends TestCase
             ],
         ];
         $config = new Config($configArray, new ConfigDefinition());
-        $this->assertEquals('http://xxx:xxx', $config->getUrlAddress());
+        Assert::assertEquals('http://xxx:xxx', $config->getUrlAddress());
     }
 
     public function missingNodeProvider(): array
