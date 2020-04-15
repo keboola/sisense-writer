@@ -8,7 +8,7 @@
 
 ### Configuration
 The configuration file contains following properties:
-- `host` - string (required): ip address to your sisense workspace
+- `host` - string (required): host or ip address to your sisense workspace
 - `port` - string (optional): port where is running sisence (default 30845)
 - `username` - string (required): username for sisense
 - `#password` - string (required): password for sisense
