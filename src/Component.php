@@ -6,7 +6,6 @@ namespace Keboola\SiSenseWriter;
 
 use GuzzleHttp\Client;
 use Keboola\Component\BaseComponent;
-use Keboola\Component\Logger;
 
 class Component extends BaseComponent
 {
@@ -19,7 +18,7 @@ class Component extends BaseComponent
             $this->getDataDir(),
             $config,
             new Api($config, new Client()),
-            new Logger()
+            $this->getLogger()
         );
 
         $writer->execute();
