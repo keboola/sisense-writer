@@ -76,9 +76,7 @@ class Api
                     'body' => $streamFile,
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -121,9 +119,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -141,9 +137,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
@@ -220,9 +214,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -268,9 +260,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -293,9 +283,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
@@ -359,9 +347,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -405,9 +391,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -434,9 +418,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -464,9 +446,7 @@ class Api
                     ],
                 ]
             );
-        } catch (ClientException $exception) {
-            throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
-        } catch (ServerException $exception) {
+        } catch (ClientException | ServerException $exception) {
             throw new UserException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
