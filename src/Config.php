@@ -21,7 +21,7 @@ class Config extends BaseConfig
     public function getUrlAddress(): string
     {
         $protocol = '';
-        if (preg_match('~^https?://~', $this->getHost())) {
+        if (!preg_match('~^https?://~', $this->getHost())) {
             $protocol = 'https://';
         }
         return sprintf(
