@@ -1,7 +1,17 @@
 version: '2'
 services:
+  app: &base
+    build:
+      context: .
+    image: keboola/sisense-writer
+    environment:
+      - SISENSE_HOST
+      - SISENSE_PORT
+      - SISENSE_USERNAME
+      - SISENSE_PASSWORD
+      - SISENSE_DATAMODEL
   dev:
-    build: .
+    <<: *base
     volumes:
       - ./:/code
       - ./data:/data

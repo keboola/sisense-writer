@@ -6,10 +6,17 @@ services:
   - docker
 
 before_script:
-  - export APP_IMAGE=keboola-component
+  - export APP_IMAGE=keboola/sisense-writer
   - docker -v
   - docker build -t $APP_IMAGE .
-  - docker run $APP_IMAGE composer ci
+  - docker run
+    -e SISENSE_HOST
+    -e SISENSE_PORT
+    -e SISENSE_USERNAME
+    -e SISENSE_PASSWORD
+    -e SISENSE_DATAMODEL
+    $APP_IMAGE
+    composer ci
 
   # push test image to ECR
   - docker pull quay.io/keboola/developer-portal-cli-v2:latest
