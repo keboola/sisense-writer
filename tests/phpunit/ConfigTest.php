@@ -16,13 +16,15 @@ class ConfigTest extends TestCase
     {
         $configArray = [
             'parameters' => [
-                'host' => 'xxx',
-                'port' => 'xxx',
-                'username' => 'xxx',
-                '#password' => 'xxx',
+                'db' => [
+                    'host' => 'xxx',
+                    'port' => 'xxx',
+                    'username' => 'xxx',
+                    '#password' => 'xxx',
+                ],
                 'tableId' => 'xxx',
-                'datamodelName' => 'xxx',
-                'columns' => [
+                'dbName' => 'xxx',
+                'items' => [
                     0 => [
                         'id' => 'id',
                         'name' => 'id',
@@ -35,25 +37,28 @@ class ConfigTest extends TestCase
 
         $config = new Config($configArray, new ConfigDefinition());
 
-        Assert::assertArrayHasKey('host', $config->getData()['parameters']);
-        Assert::assertArrayHasKey('port', $config->getData()['parameters']);
-        Assert::assertArrayHasKey('username', $config->getData()['parameters']);
-        Assert::assertArrayHasKey('#password', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('db', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('host', $config->getData()['parameters']['db']);
+        Assert::assertArrayHasKey('port', $config->getData()['parameters']['db']);
+        Assert::assertArrayHasKey('username', $config->getData()['parameters']['db']);
+        Assert::assertArrayHasKey('#password', $config->getData()['parameters']['db']);
         Assert::assertArrayHasKey('tableId', $config->getData()['parameters']);
-        Assert::assertArrayHasKey('datamodelName', $config->getData()['parameters']);
-        Assert::assertArrayHasKey('columns', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('dbName', $config->getData()['parameters']);
+        Assert::assertArrayHasKey('items', $config->getData()['parameters']);
     }
 
     public function testDefaultPort(): void
     {
         $configArray = [
             'parameters' => [
-                'host' => 'xxx',
-                'username' => 'xxx',
-                '#password' => 'xxx',
+                'db' => [
+                    'host' => 'xxx',
+                    'username' => 'xxx',
+                    '#password' => 'xxx',
+                ],
                 'tableId' => 'xxx',
-                'datamodelName' => 'xxx',
-                'columns' => [
+                'dbName' => 'xxx',
+                'items' => [
                     0 => [
                         'id' => 'id',
                         'name' => 'id',
@@ -88,13 +93,15 @@ class ConfigTest extends TestCase
     {
         $configArray = [
             'parameters' => [
-                'host' => 'xxx',
-                'port' => 'xxx',
-                'username' => 'xxx',
-                '#password' => 'xxx',
+                'db' => [
+                    'host' => 'xxx',
+                    'port' => 'xxx',
+                    'username' => 'xxx',
+                    '#password' => 'xxx',
+                ],
                 'tableId' => 'xxx',
-                'datamodelName' => 'xxx',
-                'columns' => [
+                'dbName' => 'xxx',
+                'items' => [
                     0 => [
                         'id' => 'id',
                         'name' => 'id',
@@ -114,12 +121,14 @@ class ConfigTest extends TestCase
             [
                 [
                     'parameters' => [
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -130,17 +139,19 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'host',
-                'root.parameters',
+                'root.parameters.db',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -151,17 +162,19 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'username',
-                'root.parameters',
+                'root.parameters.db',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -172,17 +185,19 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 '#password',
-                'root.parameters',
+                'root.parameters.db',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -198,12 +213,14 @@ class ConfigTest extends TestCase
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'columns' => [
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -213,33 +230,37 @@ class ConfigTest extends TestCase
                         ],
                     ],
                 ],
-                'datamodelName',
+                'dbName',
                 'root.parameters',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
+                        'dbName' => 'xxx',
                     ],
                 ],
-                'columns',
+                'items',
                 'root.parameters',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'name' => 'id',
                                 'type' => 'int',
@@ -249,18 +270,20 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'id',
-                'root.parameters.columns.0',
+                'root.parameters.items.0',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'type' => 'int',
@@ -270,18 +293,20 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'name',
-                'root.parameters.columns.0',
+                'root.parameters.items.0',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -291,18 +316,20 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'type',
-                'root.parameters.columns.0',
+                'root.parameters.items.0',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -312,18 +339,20 @@ class ConfigTest extends TestCase
                     ],
                 ],
                 'size',
-                'root.parameters.columns.0',
+                'root.parameters.items.0',
             ],
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -347,13 +376,15 @@ class ConfigTest extends TestCase
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',
@@ -377,13 +408,15 @@ class ConfigTest extends TestCase
             [
                 [
                     'parameters' => [
-                        'host' => 'xxx',
-                        'port' => 'xxx',
-                        'username' => 'xxx',
-                        '#password' => 'xxx',
+                        'db' => [
+                            'host' => 'xxx',
+                            'port' => 'xxx',
+                            'username' => 'xxx',
+                            '#password' => 'xxx',
+                        ],
                         'tableId' => 'xxx',
-                        'datamodelName' => 'xxx',
-                        'columns' => [
+                        'dbName' => 'xxx',
+                        'items' => [
                             0 => [
                                 'id' => 'id',
                                 'name' => 'id',

@@ -37,11 +37,13 @@ class DatadirTest extends DatadirTestCase
         $config['parameters'] = array_merge(
             $config['parameters'],
             [
-                'host' => getenv('SISENSE_HOST'),
-                'port' => getenv('SISENSE_PORT'),
-                'username' => getenv('SISENSE_USERNAME'),
-                '#password' => getenv('SISENSE_PASSWORD'),
-                'datamodelName' => getenv('SISENSE_DATAMODEL'),
+                'db' => [
+                    'host' => getenv('SISENSE_HOST'),
+                    'port' => getenv('SISENSE_PORT'),
+                    'username' => getenv('SISENSE_USERNAME'),
+                    '#password' => getenv('SISENSE_PASSWORD'),
+                ],
+                'dbName' => getenv('SISENSE_DATAMODEL'),
             ]
         );
         file_put_contents($configFile, json_encode($config));

@@ -8,13 +8,14 @@
 
 ### Configuration
 The configuration file contains following properties:
-- `host` - string (required): host or ip address to your sisense workspace
-- `port` - string (optional): port where is running sisence (default 30845)
-- `username` - string (required): username for sisense
-- `#password` - string (required): password for sisense
-- `datamodel` - string (required): name of datamodel in sisense
+- `db`
+    - `host` - string (required): host or ip address to your sisense workspace
+    - `port` - string (optional): port where is running sisence (default 30845)
+    - `username` - string (required): username for sisense
+    - `#password` - string (required): password for sisense
+- `dbName` - string (required): name of datamodel in sisense
 - `tableId` - string (required): name of target table 
-- `columns` - array (required): list columns
+- `items` - array (required): list columns
     - `id` - string (required): unique identifier of table column
     - `name` - string (required): name table column
     - `type` - string (required): type of column
@@ -29,13 +30,15 @@ Example of config.json
 ```json
 {
     "parameters": {
-        "host": "xxx",
-        "port": "xxx",
-        "username": "xxx",
-        "#password": "xxx",
+        "db": {
+            "host": "xxx",
+            "port": "xxx",
+            "username": "xxx",
+            "#password": "xxx",
+        },
         "tableId": "testTable",
-        "datamodelName": "KeboolaDatamodelName",
-        "columns": [
+        "dbName": "KeboolaDatamodelName",
+        "items": [
             {
                 "id": "id",
                 "name": "id",
