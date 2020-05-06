@@ -10,12 +10,12 @@ class Config extends BaseConfig
 {
     public function getHost(): string
     {
-        return $this->getValue(['parameters', 'host']);
+        return $this->getValue(['parameters', 'db', 'host']);
     }
 
     public function getPort(): string
     {
-        return $this->getValue(['parameters', 'port']);
+        return $this->getValue(['parameters', 'db', 'port']);
     }
 
     public function getUrlAddress(): string
@@ -34,12 +34,12 @@ class Config extends BaseConfig
 
     public function getUsername(): string
     {
-        return $this->getValue(['parameters', 'username']);
+        return $this->getValue(['parameters', 'db', 'username']);
     }
 
     public function getPassword(): string
     {
-        return $this->getValue(['parameters', '#password']);
+        return $this->getValue(['parameters', 'db', '#password']);
     }
 
     public function getTableId(): string
@@ -49,12 +49,12 @@ class Config extends BaseConfig
 
     public function getDatamodelName(): string
     {
-        return $this->getValue(['parameters', 'datamodelName']);
+        return $this->getValue(['parameters', 'dbName']);
     }
 
     public function getColumns(): array
     {
-        return $this->getValue(['parameters', 'columns']);
+        return $this->getValue(['parameters', 'items']);
     }
 
     public function getRelationships(): array

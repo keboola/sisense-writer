@@ -1,12 +1,14 @@
 {
     "parameters": {
-        "host": "xxx",
-        "port": "xxx",
-        "username": "xxx",
-        "#password": "xxx",
+        "db": {
+            "host": "xxx",
+            "port": "xxx",
+            "username": "xxx",
+            "#password": "xxx"
+        },
         "tableId": "sales",
-        "datamodelName": "xxx",
-        "columns": [
+        "dbName": "xxx",
+        "items": [
             {
                 "id": "usergender",
                 "name": "usergender",

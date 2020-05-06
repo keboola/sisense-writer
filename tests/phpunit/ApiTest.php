@@ -27,7 +27,16 @@ class ApiTest extends TestCase
     {
         $this->expectException(UserException::class);
         $this->expectExceptionMessage('Could not resolve host "https://invalidhost.cz:30845"');
-        $this->getApiConnection(['host' => 'invalidhost.cz'])->login();
+        $this->getApiConnection(
+            [
+                'db' => [
+                    'host' => 'invalidhost.cz',
+                    'port' => getenv('SISENSE_PORT'),
+                    'username' => getenv('SISENSE_USERNAME'),
+                    '#password' => getenv('SISENSE_PASSWORD'),
+                ],
+            ]
+        )->login();
     }
 
     public function testInvalidLogin(): void
@@ -44,7 +53,16 @@ class ApiTest extends TestCase
             getenv('SISENSE_HOST'),
             getenv('SISENSE_PORT')
         ));
-        $this->getApiConnection(['username' => 'invalid.username'])->login();
+        $this->getApiConnection(
+            [
+                'db' => [
+                    'host' => getenv('SISENSE_HOST'),
+                    'port' => getenv('SISENSE_PORT'),
+                    'username' => 'invalid.username',
+                    '#password' => getenv('SISENSE_PASSWORD'),
+                ],
+            ]
+        )->login();
     }
 
     public function testUploadFile(): void
@@ -573,13 +591,15 @@ class ApiTest extends TestCase
     {
         $configArray = [
             'parameters' => array_merge([
-                'host' => getenv('SISENSE_HOST'),
-                'port' => getenv('SISENSE_PORT'),
-                'username' => getenv('SISENSE_USERNAME'),
-                '#password' => getenv('SISENSE_PASSWORD'),
-                'datamodelName' => getenv('SISENSE_DATAMODEL'),
+                'db' => [
+                    'host' => getenv('SISENSE_HOST'),
+                    'port' => getenv('SISENSE_PORT'),
+                    'username' => getenv('SISENSE_USERNAME'),
+                    '#password' => getenv('SISENSE_PASSWORD'),
+                ],
+                'dbName' => getenv('SISENSE_DATAMODEL'),
                 'tableId' => 'sales',
-                'columns' => [
+                'items' => [
                     [
                         'id' => 'usergender',
                         'name' => 'usergender',
