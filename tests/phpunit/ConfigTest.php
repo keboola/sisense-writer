@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Keboola\SiSenseWriter\Tests;
 
 use Keboola\SiSenseWriter\Config;
-use Keboola\SiSenseWriter\ConfigDefinition;
+use Keboola\SiSenseWriter\Configuration\ConfigDefinition;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;

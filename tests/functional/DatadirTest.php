@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Keboola\DatadirTests\DatadirTestCase;
 use Keboola\DatadirTests\DatadirTestSpecificationInterface;
+use Keboola\DatadirTests\DatadirTestsProviderInterface;
 use Keboola\Temp\Temp;
 
 class DatadirTest extends DatadirTestCase
@@ -30,6 +31,16 @@ class DatadirTest extends DatadirTestCase
         $this->assertMatchesSpecification($specification, $process, $tempDatadir->getTmpFolder());
     }
 
+    /**
+     * @return DatadirTestsProviderInterface[]
+     */
+    protected function getDataProviders(): array
+    {
+        return [
+            new DatadirTestProvider($this->getTestFileDir()),
+        ];
+    }
+
     private function replaceCredentials(Temp $tempDataDir): void
     {
         $configFile = $tempDataDir->getTmpFolder() . '/config.json';
@@ -43,9 +54,11 @@ class DatadirTest extends DatadirTestCase
                     'username' => getenv('SISENSE_USERNAME'),
                     '#password' => getenv('SISENSE_PASSWORD'),
                 ],
-                'dbName' => getenv('SISENSE_DATAMODEL'),
             ]
         );
+        if (isset($config['parameters']['dbName'])) {
+            $config['parameters']['dbName'] = getenv('SISENSE_DATAMODEL');
+        }
         file_put_contents($configFile, json_encode($config));
     }
 

@@ -28,12 +28,24 @@ class SiSenseWriter
         $this->api = $api;
         $this->config = $config;
         $this->logger = $logger;
+    }
 
-        $this->api->login();
+    public function testConnection(): array
+    {
+        try {
+            $this->api->login();
+        } catch (\Throwable $exception) {
+            throw new UserException(sprintf('Connection failed "%s"', $exception->getMessage()));
+        }
+        return [
+            'status' => 'success',
+        ];
     }
 
     public function execute(): void
     {
+        $this->api->login();
+
         $csvFile = $this->api->uploadFile(
             sprintf('%s/in/tables/', $this->dataDir),
             sprintf('%s.csv', $this->config->getTableId())
