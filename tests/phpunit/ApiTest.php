@@ -10,7 +10,7 @@ use Keboola\Csv\CsvReader;
 use Keboola\Csv\CsvWriter;
 use Keboola\SiSenseWriter\Api\Api;
 use Keboola\SiSenseWriter\Config;
-use Keboola\SiSenseWriter\ConfigDefinition;
+use Keboola\SiSenseWriter\Configuration\ConfigDefinition;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 

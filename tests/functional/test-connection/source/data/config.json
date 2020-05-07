@@ -1,0 +1,11 @@
+{
+  "action": "testConnection",
+  "parameters": {
+    "db": {
+      "host": "xxx",
+      "port": "xxx",
+      "username": "xxx",
+      "#password": "xxx"
+    }
+  }
+}
