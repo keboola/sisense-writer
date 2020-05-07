@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use Keboola\SiSenseWriter\Api\Api;
 use Psr\Log\LoggerInterface;
 
-class ComponentFactory
+class SiSenseWriterFactory
 {
     private LoggerInterface $logger;
 

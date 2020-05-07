@@ -19,7 +19,7 @@ class Component extends BaseComponent
     {
         /** @var Config $config */
         $config = $this->getConfig();
-        $componentFactory = new ComponentFactory($this->getLogger());
+        $componentFactory = new SiSenseWriterFactory($this->getLogger());
         $componentFactory->create($this->getDataDir(), $config)->execute();
     }
 
@@ -27,7 +27,7 @@ class Component extends BaseComponent
     {
         /** @var Config $config */
         $config = $this->getConfig();
-        $componentFactory = new ComponentFactory($this->getLogger());
+        $componentFactory = new SiSenseWriterFactory($this->getLogger());
         return $componentFactory->create($this->getDataDir(), $config)->testConnection();
     }
 
