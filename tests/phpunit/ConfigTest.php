@@ -26,7 +26,7 @@ class ConfigTest extends TestCase
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -60,7 +60,7 @@ class ConfigTest extends TestCase
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -103,7 +103,7 @@ class ConfigTest extends TestCase
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -130,7 +130,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -153,7 +153,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -176,7 +176,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -199,7 +199,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -222,7 +222,7 @@ class ConfigTest extends TestCase
                         'tableId' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -269,7 +269,7 @@ class ConfigTest extends TestCase
                         ],
                     ],
                 ],
-                'id',
+                'dbName',
                 'root.parameters.items.0',
             ],
             [
@@ -285,7 +285,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
                             ],
@@ -308,7 +308,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'size' => '10',
                             ],
@@ -331,7 +331,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                             ],
@@ -354,7 +354,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -386,7 +386,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -418,7 +418,7 @@ class ConfigTest extends TestCase
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',

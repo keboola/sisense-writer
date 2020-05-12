@@ -15,7 +15,7 @@ class ApiHelperTest extends TestCase
     {
         $input = [
             [
-                'id' => 'testId',
+                'dbName' => 'testId',
                 'name' => 'testName',
                 'type' => 'decimal',
                 'size' => '5,2',

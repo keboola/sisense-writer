@@ -31,7 +31,7 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->isRequired()
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('id')->isRequired()->end()
+                            ->scalarNode('dbName')->isRequired()->end()
                             ->scalarNode('name')->isRequired()->end()
                             ->scalarNode('type')->isRequired()->end()
                             ->scalarNode('size')->isRequired()->end()

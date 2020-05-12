@@ -567,7 +567,7 @@ class ApiTest extends TestCase
         $csvReader = new CsvReader($csvFile->getPathname());
         $columns = array_map(function ($item) {
             return [
-                'id' => $item,
+                'dbName' => $item,
                 'name' => $item,
                 'type' => 'varchar',
                 'size' => '255',
@@ -601,7 +601,7 @@ class ApiTest extends TestCase
                 'tableId' => 'sales',
                 'items' => [
                     [
-                        'id' => 'usergender',
+                        'dbName' => 'usergender',
                         'name' => 'usergender',
                         'type' => 'varchar',
                         'size' => '255',
