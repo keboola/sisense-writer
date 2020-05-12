@@ -13,7 +13,7 @@ class Helpers
         $reformatColumns = [];
         foreach ($columns as $column) {
             $reformatColumn = [
-                'id' => $column['id'],
+                'id' => $column['dbName'],
                 'name' => $column['name'],
                 'type' => self::getType($column['type']),
                 'hidden' => false,

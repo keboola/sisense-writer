@@ -4,31 +4,32 @@
             "host": "xxx",
             "port": "xxx",
             "username": "xxx",
-            "#password": "xxx"
+            "#password": "xxx",
+            "database": "xxx"
         },
-        "tableId": "sales",
+        "tableId": "in.c-sisense.sales",
         "dbName": "xxx",
         "items": [
             {
-                "id": "usergender",
+                "dbName": "usergender",
                 "name": "usergender",
                 "type": "varchar",
                 "size": "255"
             },
             {
-                "id": "usercity",
+                "dbName": "usercity",
                 "name": "usercity",
                 "type": "varchar",
                 "size": "255"
             },
             {
-                "id": "usersentiment",
+                "dbName": "usersentiment",
                 "name": "usersentiment",
                 "type": "varchar",
                 "size": "255"
             },
             {
-                "id": "zipcode",
+                "dbName": "zipcode",
                 "name": "zipcode",
                 "type": "varchar",
                 "size": "255"

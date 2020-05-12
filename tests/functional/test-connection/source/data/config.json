@@ -5,7 +5,8 @@
       "host": "xxx",
       "port": "xxx",
       "username": "xxx",
-      "#password": "xxx"
+      "#password": "xxx",
+      "database": "xxx"
     }
   }
 }

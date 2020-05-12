@@ -21,12 +21,13 @@ class ConfigTest extends TestCase
                     'port' => 'xxx',
                     'username' => 'xxx',
                     '#password' => 'xxx',
+                    'database' => 'xxx',
                 ],
                 'tableId' => 'xxx',
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -55,12 +56,13 @@ class ConfigTest extends TestCase
                     'host' => 'xxx',
                     'username' => 'xxx',
                     '#password' => 'xxx',
+                    'database' => 'xxx',
                 ],
                 'tableId' => 'xxx',
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -98,12 +100,13 @@ class ConfigTest extends TestCase
                     'port' => 'xxx',
                     'username' => 'xxx',
                     '#password' => 'xxx',
+                    'database' => 'xxx',
                 ],
                 'tableId' => 'xxx',
                 'dbName' => 'xxx',
                 'items' => [
                     0 => [
-                        'id' => 'id',
+                        'dbName' => 'id',
                         'name' => 'id',
                         'type' => 'int',
                         'size' => '10',
@@ -125,12 +128,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -148,12 +152,13 @@ class ConfigTest extends TestCase
                             'host' => 'xxx',
                             'port' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -171,12 +176,13 @@ class ConfigTest extends TestCase
                             'host' => 'xxx',
                             'port' => 'xxx',
                             'username' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -195,11 +201,12 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -218,11 +225,12 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -241,6 +249,7 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
@@ -257,6 +266,7 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
@@ -269,7 +279,7 @@ class ConfigTest extends TestCase
                         ],
                     ],
                 ],
-                'id',
+                'dbName',
                 'root.parameters.items.0',
             ],
             [
@@ -280,12 +290,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
                             ],
@@ -303,12 +314,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'size' => '10',
                             ],
@@ -326,12 +338,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                             ],
@@ -349,12 +362,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -381,12 +395,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',
@@ -413,12 +428,13 @@ class ConfigTest extends TestCase
                             'port' => 'xxx',
                             'username' => 'xxx',
                             '#password' => 'xxx',
+                            'database' => 'xxx',
                         ],
                         'tableId' => 'xxx',
                         'dbName' => 'xxx',
                         'items' => [
                             0 => [
-                                'id' => 'id',
+                                'dbName' => 'id',
                                 'name' => 'id',
                                 'type' => 'int',
                                 'size' => '10',

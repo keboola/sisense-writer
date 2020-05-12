@@ -82,16 +82,16 @@ class SiSenseWriter
             $datamodel->getOid(),
             $this->api->getDatasetName(
                 $this->config->getDatamodelName(),
-                $this->config->getTableId()
+                $this->config->getTableName()
             )
         );
         if (is_null($dataset)) {
-            $this->logger->info(sprintf('Creating new dataset "%s"', $this->config->getTableId()));
+            $this->logger->info(sprintf('Creating new dataset "%s"', $this->config->getTableName()));
             $dataset = $this->api->createDataset(
                 $datamodel->getOid(),
                 $this->api->getDatasetName(
                     $this->config->getDatamodelName(),
-                    $this->config->getTableId()
+                    $this->config->getTableName()
                 ),
                 $csvFile,
                 sprintf('%s.csv', $this->config->getTableId())
@@ -110,13 +110,13 @@ class SiSenseWriter
 
     private function createAndGetTable(Datamodel $datamodel, Dataset $dataset): Table
     {
-        $table = $this->api->getTable($datamodel->getOid(), $dataset->getOid(), $this->config->getTableId());
+        $table = $this->api->getTable($datamodel->getOid(), $dataset->getOid(), $this->config->getTableName());
         if (is_null($table)) {
-            $this->logger->info(sprintf('Creating new table "%s"', $this->config->getTableId()));
+            $this->logger->info(sprintf('Creating new table "%s"', $this->config->getTableName()));
             $table = $this->api->createTable(
                 $datamodel->getOid(),
                 $dataset->getOid(),
-                $this->config->getTableId(),
+                $this->config->getTableName(),
                 $this->config->getColumns()
             );
         } else {
