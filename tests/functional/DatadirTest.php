@@ -53,12 +53,10 @@ class DatadirTest extends DatadirTestCase
                     'port' => getenv('SISENSE_PORT'),
                     'username' => getenv('SISENSE_USERNAME'),
                     '#password' => getenv('SISENSE_PASSWORD'),
+                    'database' => getenv('SISENSE_DATAMODEL'),
                 ],
             ]
         );
-        if (isset($config['parameters']['dbName'])) {
-            $config['parameters']['dbName'] = getenv('SISENSE_DATAMODEL');
-        }
         file_put_contents($configFile, json_encode($config));
     }
 

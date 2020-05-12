@@ -34,6 +34,7 @@ class ApiTest extends TestCase
                     'port' => getenv('SISENSE_PORT'),
                     'username' => getenv('SISENSE_USERNAME'),
                     '#password' => getenv('SISENSE_PASSWORD'),
+                    'database' => getenv('SISENSE_DATAMODEL'),
                 ],
             ]
         )->login();
@@ -60,6 +61,7 @@ class ApiTest extends TestCase
                     'port' => getenv('SISENSE_PORT'),
                     'username' => 'invalid.username',
                     '#password' => getenv('SISENSE_PASSWORD'),
+                    'database' => getenv('SISENSE_DATAMODEL'),
                 ],
             ]
         )->login();
@@ -596,6 +598,7 @@ class ApiTest extends TestCase
                     'port' => getenv('SISENSE_PORT'),
                     'username' => getenv('SISENSE_USERNAME'),
                     '#password' => getenv('SISENSE_PASSWORD'),
+                    'database' => getenv('SISENSE_DATAMODEL'),
                 ],
                 'dbName' => getenv('SISENSE_DATAMODEL'),
                 'tableId' => 'sales',

@@ -23,6 +23,7 @@ class ConfigDefinition extends BaseConfigDefinition
                         ->scalarNode('port')->defaultValue('30845')->end()
                         ->scalarNode('username')->isRequired()->end()
                         ->scalarNode('#password')->isRequired()->end()
+                        ->scalarNode('database')->isRequired()->end()
                     ->end()
                 ->end()
                 ->scalarNode('dbName')->isRequired()->end()

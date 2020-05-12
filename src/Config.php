@@ -49,7 +49,7 @@ class Config extends BaseConfig
 
     public function getDatamodelName(): string
     {
-        return $this->getValue(['parameters', 'dbName']);
+        return $this->getValue(['parameters', 'db', 'database']);
     }
 
     public function getColumns(): array
