@@ -600,7 +600,7 @@ class ApiTest extends TestCase
                     '#password' => getenv('SISENSE_PASSWORD'),
                     'database' => getenv('SISENSE_DATAMODEL'),
                 ],
-                'dbName' => getenv('SISENSE_DATAMODEL'),
+                'dbName' => 'in.c-sisense.sales',
                 'tableId' => 'sales',
                 'items' => [
                     [

@@ -47,6 +47,11 @@ class Config extends BaseConfig
         return $this->getValue(['parameters', 'tableId']);
     }
 
+    public function getTableName(): string
+    {
+        return $this->getValue(['parameters', 'dbName']);
+    }
+
     public function getDatamodelName(): string
     {
         return $this->getValue(['parameters', 'db', 'database']);

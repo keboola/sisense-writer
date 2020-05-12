@@ -7,7 +7,7 @@
             "#password": "xxx",
             "database": "xxx"
         },
-        "tableId": "sales",
+        "tableId": "in.c-sisense.sales",
         "dbName": "xxx",
         "items": [
             {
