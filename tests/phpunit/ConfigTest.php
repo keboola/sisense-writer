@@ -75,6 +75,33 @@ class ConfigTest extends TestCase
         Assert::assertEquals(30845, $config->getPort());
     }
 
+    public function testTrimUrlHost(): void
+    {
+        $configArray = [
+            'parameters' => [
+                'db' => [
+                    'host' => 'http://52.205.205.182/',
+                    'username' => 'xxx',
+                    '#password' => 'xxx',
+                    'database' => 'xxx',
+                ],
+                'tableId' => 'xxx',
+                'dbName' => 'xxx',
+                'items' => [
+                    0 => [
+                        'dbName' => 'id',
+                        'name' => 'id',
+                        'type' => 'int',
+                        'size' => '10',
+                    ],
+                ],
+            ],
+        ];
+
+        $config = new Config($configArray, new ConfigDefinition());
+        Assert::assertEquals('http://52.205.205.182', $config->getHost());
+    }
+
     /**
      * @dataProvider missingNodeProvider
      */
