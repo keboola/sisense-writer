@@ -1,8 +1,8 @@
-# SiSense writer
+# Sisense writer
 
 [![Build Status](https://travis-ci.com/keboola/sisense-writer.svg?branch=master)](https://travis-ci.com/keboola/sisense-writer)
 
-> Exports data to [SiSense database](https://www.sisense.com/)
+> Exports data to [Sisense database](https://www.sisense.com/)
 
 # Usage
 
