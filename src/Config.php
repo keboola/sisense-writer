@@ -10,7 +10,7 @@ class Config extends BaseConfig
 {
     public function getHost(): string
     {
-        return $this->getValue(['parameters', 'db', 'host']);
+        return trim($this->getValue(['parameters', 'db', 'host']), '/');
     }
 
     public function getPort(): string
