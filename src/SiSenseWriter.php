@@ -142,13 +142,13 @@ class SiSenseWriter
 
             $sourceColumn = array_values(
                 array_filter($sourceTable->getColumns(), function (TableColumn $column) use ($relationship) {
-                    return $relationship['column'] === $column->getOid();
+                    return $relationship['column'] === $column->getName();
                 })
             );
 
             $destinationColumn = array_values(
                 array_filter($destinationTable->getColumns(), function (TableColumn $column) use ($relationship) {
-                    return $relationship['target']['column'] === $column->getOid();
+                    return $relationship['target']['column'] === $column->getName();
                 })
             );
             $this->logger->info('Creating relationship');
@@ -157,12 +157,12 @@ class SiSenseWriter
                 [
                     'dataset' => $sourceDataset->getOid(),
                     'table' => $sourceTable->getOid(),
-                    'column' => $sourceColumn[0]['oid'],
+                    'column' => $sourceColumn[0]->getOid(),
                 ],
                 [
                     'dataset' => $destinationDataset->getOid(),
                     'table' => $destinationTable->getOid(),
-                    'column' => $destinationColumn[0]['oid'],
+                    'column' => $destinationColumn[0]->getOid(),
                 ]
             );
         }
