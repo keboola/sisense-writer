@@ -10,10 +10,13 @@ use GuzzleHttp\Exception\ServerException;
 use Keboola\DatadirTests\DatadirTestCase;
 use Keboola\DatadirTests\DatadirTestSpecificationInterface;
 use Keboola\DatadirTests\DatadirTestsProviderInterface;
+use Keboola\SiSenseWriter\Api\Api;
 use Keboola\Temp\Temp;
 
 class DatadirTest extends DatadirTestCase
 {
+    protected Api $api;
+
     /**
      * @dataProvider provideDatadirSpecifications
      */
@@ -24,11 +27,29 @@ class DatadirTest extends DatadirTestCase
 
         $this->dropDatamodel();
 
+        $this->setupDatabase($this->dataName());
+
         $process = $this->runScript($tempDatadir->getTmpFolder());
 
         $this->dropDatamodel();
 
         $this->assertMatchesSpecification($specification, $process, $tempDatadir->getTmpFolder());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->api = $this->apiFactory->create(); // TODO
+    }
+
+    /**
+     * Run per-test specific database setup
+     */
+    protected function setupDatabase(string $dataset): void
+    {
+        if ($dataset === 'test-connection') {
+            // ..
+        }
     }
 
     /**
