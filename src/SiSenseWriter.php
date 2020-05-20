@@ -146,11 +146,28 @@ class SiSenseWriter
                 })
             );
 
+            if (count($sourceColumn) === 0) {
+                throw new UserException(sprintf(
+                    'Column "%s" in table "%s" does not exists',
+                    $relationship['column'],
+                    $sourceTable->getName()
+                ));
+            }
+
             $destinationColumn = array_values(
                 array_filter($destinationTable->getColumns(), function (TableColumn $column) use ($relationship) {
                     return $relationship['target']['column'] === $column->getName();
                 })
             );
+
+            if (count($destinationColumn) === 0) {
+                throw new UserException(sprintf(
+                    'Column "%s" in table "%s" does not exists',
+                    $relationship['target']['column'],
+                    $destinationTable->getName()
+                ));
+            }
+
             $this->logger->info('Creating relationship');
             $this->api->createRelationship(
                 $datamodel->getOid(),
