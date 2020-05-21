@@ -10,19 +10,26 @@ use GuzzleHttp\Exception\ServerException;
 use Keboola\DatadirTests\DatadirTestCase;
 use Keboola\DatadirTests\DatadirTestSpecificationInterface;
 use Keboola\DatadirTests\DatadirTestsProviderInterface;
-use Keboola\Temp\Temp;
+use Symfony\Component\Finder\Finder;
 
 class DatadirTest extends DatadirTestCase
 {
+
+    private array $multiConfigTest = ['failed-relationship-column'];
+
     /**
      * @dataProvider provideDatadirSpecifications
      */
     public function testDatadir(DatadirTestSpecificationInterface $specification): void
     {
         $tempDatadir = $this->getTempDatadir($specification);
-        $this->replaceCredentials($tempDatadir);
+        $this->replaceCredentials($tempDatadir->getTmpFolder());
 
         $this->dropDatamodel();
+
+        if (in_array($this->dataName(), $this->multiConfigTest)) {
+            $this->prepaireData($tempDatadir->getTmpFolder());
+        }
 
         $process = $this->runScript($tempDatadir->getTmpFolder());
 
@@ -41,9 +48,9 @@ class DatadirTest extends DatadirTestCase
         ];
     }
 
-    private function replaceCredentials(Temp $tempDataDir): void
+    private function replaceCredentials(string $tempDataDir): void
     {
-        $configFile = $tempDataDir->getTmpFolder() . '/config.json';
+        $configFile = $tempDataDir . '/config.json';
         $config = json_decode((string) file_get_contents($configFile), true);
         $config['parameters'] = array_merge(
             $config['parameters'],
@@ -101,6 +108,21 @@ class DatadirTest extends DatadirTestCase
             );
         } catch (ClientException $exception) {
         } catch (ServerException $exception) {
+        }
+    }
+
+    private function prepaireData(string $getTmpFolder): void
+    {
+        $finder = new Finder();
+        $finder->directories()
+            ->sortByName()
+            ->in($getTmpFolder)
+            ->exclude(['in', 'out'])
+            ->depth(0)
+        ;
+        foreach ($finder as $item) {
+            $this->replaceCredentials($item->getPathname());
+            $this->runScript($item->getPathname());
         }
     }
 }
