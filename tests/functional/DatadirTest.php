@@ -15,7 +15,10 @@ use Symfony\Component\Finder\Finder;
 class DatadirTest extends DatadirTestCase
 {
 
-    private array $multiConfigTest = ['failed-relationship-column'];
+    private array $multiConfigTest = [
+        'failed-relationship-column',
+        'create-tables-with-relationship'
+    ];
 
     /**
      * @dataProvider provideDatadirSpecifications

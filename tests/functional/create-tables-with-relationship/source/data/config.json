@@ -1,0 +1,48 @@
+{
+    "parameters": {
+        "db": {
+            "host": "xxx",
+            "port": "xxx",
+            "username": "xxx",
+            "#password": "xxx",
+            "database": "xxx"
+        },
+        "tableId": "in.c-sisense.sales",
+        "dbName": "demo",
+        "items": [
+            {
+                "dbName": "usergender",
+                "name": "usergender",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "dbName": "usercity",
+                "name": "usercity",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "dbName": "usersentiment",
+                "name": "usersentiment",
+                "type": "varchar",
+                "size": "255"
+            },
+            {
+                "dbName": "zipcode",
+                "name": "zipcode",
+                "type": "varchar",
+                "size": "255"
+            }
+        ],
+        "relationships": [
+            {
+                "column": "zipcode",
+                "target": {
+                    "table": "baseTable",
+                    "column": "zipcode"
+                }
+            }
+        ]
+    }
+}
