@@ -17,7 +17,7 @@ class DatadirTest extends DatadirTestCase
 
     private array $multiConfigTest = [
         'failed-relationship-column',
-        'create-tables-with-relationship'
+        'create-tables-with-relationship',
     ];
 
     /**
