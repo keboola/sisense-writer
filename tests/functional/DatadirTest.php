@@ -31,7 +31,8 @@ class DatadirTest extends DatadirTestCase
         $this->dropDatamodel();
 
         if (in_array($this->dataName(), $this->multiConfigTest)) {
-            $this->prepaireData($tempDatadir->getTmpFolder());
+            // Prepare data for the test - run setup configuration from this sub-folder
+            $this->prepaireData($tempDatadir->getTmpFolder() . '/setup');
         }
 
         $process = $this->runScript($tempDatadir->getTmpFolder());
