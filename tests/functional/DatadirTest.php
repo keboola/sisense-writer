@@ -100,16 +100,17 @@ class DatadirTest extends DatadirTestCase
                     ],
                 ]
             );
-
             $datamodelsJson = json_decode($datamodels->getBody()->getContents(), true);
-            $client->delete(
-                sprintf('%s/api/v2/datamodels/%s', $sisenseUrl, $datamodelsJson['oid']),
-                [
-                    'headers' => [
-                        'authorization' => 'Bearer ' . $accessToken,
-                    ],
-                ]
-            );
+            if (!empty($datamodelsJson)) {
+                $client->delete(
+                    sprintf('%s/api/v2/datamodels/%s', $sisenseUrl, $datamodelsJson['oid']),
+                    [
+                        'headers' => [
+                            'authorization' => 'Bearer ' . $accessToken,
+                        ],
+                    ]
+                );
+            }
         } catch (ClientException $exception) {
         } catch (ServerException $exception) {
         }
