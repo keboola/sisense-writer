@@ -100,6 +100,10 @@ class Api
             return null;
         }
 
+        if (empty($response)) {
+            return null;
+        }
+
         return Datamodel::build($response);
     }
 
